@@ -242,8 +242,8 @@ export default function CameraOcrModal({
         {/* ヘッダー */}
         <div className="ocrModalHeader">
           <h2 className="ocrModalTitle">
-            <span>📷</span>
-            写真から単語を読み込む
+            <img className="cameraIcon" src="cameraBlack.png" alt="" />
+            Scan Words from Photo
           </h2>
 
           <button
@@ -269,12 +269,12 @@ export default function CameraOcrModal({
                   autoPlay
                   playsInline
                   muted
-                  className="w-full h-full object-contain"
+                  className="cameraVideo"
                 />
 
                 <div className="cameraGuide">
                   <span className="cameraGuideText">
-                    単語を枠内に収めて撮影
+                    Fit the words inside the frame
                   </span>
                 </div>
               </div>
@@ -287,8 +287,8 @@ export default function CameraOcrModal({
                 onClick={handleCapture}
                 className="captureButton"
               >
-                <span>📷</span>
-                写真を撮影する
+                <img className="cameraIcon" src="cameraWhite.png" alt="" />
+                Take Photo
               </button>
             )}
 
@@ -309,18 +309,18 @@ export default function CameraOcrModal({
               }
               className="fileSelectButton"
             >
-              ライブラリ・ファイルから写真を選択
+              Choose Photo from Library or Files
             </button>
           </div>
         ) : (
           /* 解析中・検出結果選択画面 */
-          <div className="flex flex-col">
+          <div className="previewContainer">
             {/* プレビュー画像（アスペクト比を維持して縦潰れ・横伸びを防止） */}
-            <div className="w-full bg-stone-900 rounded-xl overflow-hidden mb-2 border border-stone-200 flex items-center justify-center min-h-[160px] max-h-[220px]">
+            <div className="previewImageWrapper">
               <img
                 src={capturedImage}
-                alt="撮影プレビュー"
-                className="w-full h-full max-h-[220px] object-contain"
+                alt="Photo Preview"
+                className="previewImage"
               />
             </div>
 
@@ -328,10 +328,10 @@ export default function CameraOcrModal({
             <button
               type="button"
               onClick={handleRetake}
-              className="w-full py-2.5 mb-3 bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-700 text-xs font-bold rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+              className="retakeButton"
             >
-              <span>🔄</span>
-              <span>再撮影する</span>
+              <img className="cameraIcon" src="retry.png" alt="" />
+              <span>Retake Photo</span>
             </button>
 
             {/* 解析中ローディング（進捗％表示付き） */}
@@ -340,7 +340,7 @@ export default function CameraOcrModal({
                 <div className="loadingSpinner" />
 
                 <p className="loadingText">
-                  ブラウザで単語を読み取り中...
+                  Reading words in the browser...
                   ({ocrProgress}%)
                 </p>
               </div>
@@ -358,21 +358,21 @@ export default function CameraOcrModal({
               <div className="detectedSection">
                 <div className="detectedHeader">
                   <span className="detectedTitle">
-                    検出された単語
-                    （選択して入力欄に反映）
+                    Detected Words
+                    <br />
+                    (Select words to add)
                   </span>
 
                   <span className="selectedCount">
-                    選択中: {selectedWords.length} / 5
+                    Selected<br /> {selectedWords.length} / 5
                   </span>
                 </div>
 
                 {detectedWords.length === 0 ? (
                   <div className="noWords">
-                    英単語が検出されませんでした。
+                    No English words were detected.
                     <br />
-                    もう一度ピントを合わせて
-                    再撮影してください。
+                    Please refocus the image and retake the photo.
                   </div>
                 ) : (
                   <div className="wordList">
@@ -417,7 +417,7 @@ export default function CameraOcrModal({
                 onClick={handleModalClose}
                 className="cancelButton"
               >
-                キャンセル
+                Cancel
               </button>
 
               <button
@@ -434,7 +434,10 @@ export default function CameraOcrModal({
                     : "applyButtonDisabled"
                 }`}
               >
-                入力欄に反映 ({selectedWords.length}件)
+               Add to Input (
+                {selectedWords.length}
+                {selectedWords.length === 1 ? "Word" : "Words"}
+              )
               </button>
             </div>
           </div>

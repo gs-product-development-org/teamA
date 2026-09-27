@@ -409,9 +409,15 @@ export default function WordRegisterPage() {
     <main>
       <div className="container">
         <div className={styles.registerHeader}>
-          <h1 className={`font radius ${styles.title}`}>
-            CREATE STORY
-          </h1>
+          <div>
+            <p className={styles.headerSub}>
+              English Story
+            </p>
+
+            <h1 className={styles.headerTitle}>
+              Create Story
+            </h1>
+          </div>
           <button
             type="button"
             disabled={isLoading}

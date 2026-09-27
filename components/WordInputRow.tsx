@@ -73,7 +73,7 @@ const hasEnglish = item.english.trim().length > 0;
           <input
             type="text"
             disabled
-            placeholder="English Word"
+            placeholder={`Japanese Word ${index + 1}`}
             className="disabledInput"
           />
         )}
