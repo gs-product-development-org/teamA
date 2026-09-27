@@ -68,15 +68,8 @@
    ======================================== */
 /* 丸角 */
    .radius{
-    border-radius: 8px;
+    border-radius: 16px;
    }
-
-   /* 仮 →コンポーネントにする*/
-.header{
-  background-color: var(--color-primary-yellow);
-  font-size: 40px;
-  height: 65px;
-}
 
 body {
   background-color: var(--color-base);

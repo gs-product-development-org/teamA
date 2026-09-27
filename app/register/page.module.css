@@ -14,8 +14,27 @@
 
 .registerHeader {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
 }
 
+.headerSub {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-primary-purple);
+  margin-left: 8px;
+}
+
+.headerTitle {
+  margin-top: 4px;
+  margin-left: 8px;
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #ffffff;
+}
 .cameraButton {
   font-size: 1rem; /* 16px */
   display: flex;
@@ -47,7 +66,11 @@
   justify-content: center;
   background-color: var(--color-primary-blue);
 }
-
+.cameraIcon img{
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+}
 /* ========================================
    単語入力
    ======================================== */
@@ -67,22 +90,23 @@
 }
 
 .genreSelect {
-  display: block;
-  width: 100%;
-  height: 40px;
-  padding: 0.625rem 0.75rem;
   box-sizing: border-box;
-  background-color: white;
-  color: var(--color-text-main);
-  font-weight: 400;
-  font-size: 1rem; /* 16px */
-  outline: none;
+  border: 2px solid #0000;
+  color: #292524;
+  background-color: #fff;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.875rem;
   margin-top: 16px;
-  border: 2px solid transparent;
+  font-weight: 700;
+}
+
+.activeBorder {
+  border: 4px solid var(--color-primary-blue);
 }
 
 .genreSelect:focus {
-    border:3px solid var(--color-primary-blue);
+    border:4px solid var(--color-primary-blue);
 }
 
 .genreSelect:disabled {
@@ -90,7 +114,7 @@
 }
 
 .activeBorder {
-  border:3px solid var(--color-primary-blue);
+  border:4px solid var(--color-primary-blue);
 }
 
 .wordInputList {
@@ -104,7 +128,7 @@
   padding: 0.625rem;
   margin-bottom: 1.25rem;
   border: 2px dashed #d6d3d1;
-  border-radius: 8px;
+  border-radius: 16px;
   background-color: #ffffff;
   color: black;
   font-weight: 700;
@@ -144,7 +168,7 @@
   padding: 0.75rem;
   background-color: #fff1f2;
   border: 1px solid #fecdd3;
-  border-radius: 8px;
+  border-radius: 16px;
   font-size: 1rem; /* 16px */
   color: #be123c;
   line-height: 1.625;
@@ -157,8 +181,8 @@
   padding: 0.75rem;
   margin: 16px 8px 8px 8px;
   font-weight: 700;
-  border-radius: 8px;
-  font-size: 1rem; /* 16px */
+  border-radius: 16px;
+  font-size: 1.3rem; 
   border: none;
 }
 
@@ -169,9 +193,6 @@
   cursor: pointer;
 }
 
-.submitButtonActive:hover {
-  background-color: #0369a1;
-}
 
 .submitButtonDisabled {
   background-color: #e7e5e4;
