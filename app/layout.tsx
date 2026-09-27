@@ -19,6 +19,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "ものがたん",
   description: "物語で英単語を覚えよう",
+  icons: {
+    icon: "/seicyu_color3.PNG",
+    apple: "/seicyu_color3.PNG",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

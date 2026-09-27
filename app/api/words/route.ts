@@ -274,8 +274,9 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    // クエリパラメータから userId を取得
-    const userId = Number(searchParams.get("userId"));
+    // クエリパラメータから userId を取得（省略時や不正な値の場合は安全にデフォルト 1 へフォールバック）
+    const parsedUserId = Number(searchParams.get("userId"));
+    const userId = isNaN(parsedUserId) || parsedUserId <= 0 ? 1 : parsedUserId;
     //Supabase へ接続
     const supabase = await createClient();
 

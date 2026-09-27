@@ -107,80 +107,89 @@ export default function Tabs() {
           type="text"
           value={searchWord}
           onChange={(e) => setSearchWord(e.target.value)}
-          placeholder="検索キーワードを入力してください"
+          placeholder="Search..."
         />
       </div>
-      <div className={`${styles.tabs} ${styles.boxCenter}`}>
-        <button  className={`radius ${styles.tab} ${
-      activeTab === "story" ? styles.active : ""
-    }`} onClick={() => setActiveTab("story")}>
-          物語
+      {/* 重なりファイルフォルダー風タブ切り替え */}
+      <div className={styles.tabsContainer}>
+        <button
+          type="button"
+          className={`${styles.storyTab} ${
+            activeTab === "story" ? styles.active : styles.inactive
+          }`}
+          onClick={() => setActiveTab("story")}
+        >
+          <span>Stories</span>
         </button>
 
-        <button className={`radius ${styles.tab} ${
-      activeTab === "word" ? styles.active : ""
-    }`} onClick={() => setActiveTab("word")}>
-          単語
+        <button
+          type="button"
+          className={`${styles.wordTab} ${
+            activeTab === "word" ? styles.active : styles.inactive
+          }`}
+          onClick={() => setActiveTab("word")}
+        >
+          <span>Words</span>
         </button>
       </div>
 
-  
       <div>
         {activeTab === "story" && (
-          <div className={`radius ${styles.story}`}>
-             {isLoading ? (
-              <Loading />
-            ) : (
-            filteredStories.map((story) => (
-              <div key={story.id}className={`${styles.contentDisplay} ${styles.storyContainer}`} >
-                <Link href={`/list/${story.id}`}>
-                  <div>
-                    <div className={styles.storyTitle}>
-                      <h3 className={styles.title}>{story.title}</h3>  
-                      <h3 className={styles.titleLink}>＞</h3>
-                    </div>
-                    <div className={styles.storyDetail}>
-                      {story.imageUrl && (
-                      <img
-                        className={styles.storyImage}
-                        src={story.imageUrl}
-                        alt="物語のイメージ画像"
-                      />
-                    )} 
-                    <p className={styles.storyText}>{story.content}</p>
-                    </div>
+          <div className={styles.storyArea}>
+            <div className={styles.story}>
+              {isLoading ? (
+                <Loading />
+              ) : (
+                filteredStories.map((story) => (
+                  <div key={story.id} className={styles.storyContainer}>
+                    <Link href={`/list/${story.id}`}>
+                      <div className={styles.storyTitle}>
+                        <h3 className={styles.title}>{story.title}</h3>  
+                        <span className={styles.titleLink}>▶</span>
+                      </div>
+                      <div className={styles.storyDetail}>
+                        {story.imageUrl && (
+                          <img
+                            className={styles.storyImage}
+                            src={story.imageUrl}
+                            alt="物語のイメージ画像"
+                          />
+                        )} 
+                        <p className={styles.storyText}>{story.content}</p>
+                      </div>
+                    </Link>
                   </div>
-                 </Link>
-              </div>
-            ))
-          )}
+                ))
+              )}
+            </div>
           </div>
         )}
 
         {activeTab === "word" && (
-          <div className={styles.boxCenter}>
-            <table className={`radius ${styles.wordTable}`}>
-              <thead>
-                <tr>
-                  <th className={`${styles.tableRow} ${styles.textCenter}`}>英語</th>
-                  <th className={`${styles.tableRow} ${styles.textCenter}`}>日本語</th>
-                </tr>
-              </thead>
-              <tbody>
-                  {filteredWords.map((word)=>{
-                      return(         
-                          <tr key={word.word_id}>
-                              <td className={styles.textCenter}>{word.english}</td>
-                              <td  className={styles.textCenter}>
-                                {word.meanings.map((meaning) => {
-                                  return <p key={meaning.meaning_id}>{meaning.meaning}</p>;
-                                })}
-                              </td>
-                          </tr>
-                      );
-                  })}
-              </tbody>
-            </table>
+          <div className={styles.wordArea}>
+            <div className={styles.wordList}>
+              {isLoading ? (
+                <Loading />
+              ) : filteredWords.length === 0 ? (
+                <div className={styles.emptyWordMessage}>単語が見つかりませんでした</div>
+              ) : (
+                filteredWords.map((word) => (
+                  <div key={word.word_id} className={styles.wordCard}>
+                    <div className={styles.wordEnglish}>
+                      <span className={styles.wordDot}>•</span>
+                      <span className={styles.englishText}>{word.english}</span>
+                    </div>
+                    <div className={styles.meaningsContainer}>
+                      {word.meanings.map((meaning) => (
+                        <span key={meaning.meaning_id} className={styles.meaningTag}>
+                          {meaning.meaning}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         )}
       </div>

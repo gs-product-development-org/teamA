@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { validateStoryInput } from "@/lib/validations/story";
 
 /**
  * 物語に含まれる単語と活用形の型定義
@@ -44,23 +45,23 @@ export async function POST(request: Request) {
     const body: RegisterStoryRequest = await request.json();
 
     // 2. 入力値バリデーション
-    if (!body.userId || typeof body.userId !== "number") {
+    if (!body.userId || typeof body.userId !== "number" || body.userId <= 0) {
       return NextResponse.json(
         { error: "有効なユーザーIDを指定してください" },
         { status: 400 },
       );
     }
 
-    if (
-      !body.title ||
-      typeof body.title !== "string" ||
-      body.title.trim() === "" ||
-      !body.story ||
-      typeof body.story !== "string" ||
-      body.story.trim() === ""
-    ) {
+    // タイトル・本文・和訳の文字数・必須チェック（DB肥大化・DoS対策）
+    const storyValidation = validateStoryInput({
+      title: body.title,
+      story: body.story,
+      japaneseStory: body.japaneseStory,
+    });
+
+    if (!storyValidation.isValid) {
       return NextResponse.json(
-        { error: "タイトルおよび英文本文を入力してください" },
+        { error: storyValidation.error || "入力内容に不備があります" },
         { status: 400 },
       );
     }

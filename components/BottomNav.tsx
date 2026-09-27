@@ -14,19 +14,22 @@ export default function BottomNav() {
 
   const navItems = [
     {
-      label: "登録",
-      href: "/register",
-      icon: "/register.png",
-    },
-    {
-      label: "一覧",
-      href: "/list",
-      icon: "/list.png",
-    },
-    {
-      label: "クイズ",
+      label: "Quiz",
       href: "/quiz",
       icon: "/quiz.png",
+      activeColor: "var(--color-primary-orange)",
+    },
+    {
+      label: "New",
+      href: "/register",
+      icon: "/register.png",
+      activeColor: "var(--color-primary-purple)",
+    },
+    {
+      label: "List",
+      href: "/list",
+      icon: "/list.png",
+      activeColor: "var(--color-primary-pink)",
     },
   ];
 
@@ -45,14 +48,20 @@ export default function BottomNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`navLink ${
-                  isActive ? "active" : "inactive"
-                }`}
+                className={`navLink ${isActive ? "active" : "inactive"}`}
+                style={
+                  {
+                    "--active-color": item.activeColor,
+                  } as React.CSSProperties
+                }
               >
-                <img
+                <span
                   className="navIcon"
-                  src={item.icon}
-                  alt={item.label}
+                  style={{
+                    maskImage: `url(${item.icon})`,
+                    WebkitMaskImage: `url(${item.icon})`,
+                  }}
+                  aria-label={item.label}
                 />
 
                 <span className="navLabel">

@@ -85,8 +85,8 @@ export default function DetailStoryEnglishView({
     <div className="storyView">
 
       {/* 物語タイトル */}
-      <h1 className="storyTitle">
-        <span className="storyIcon">📖</span>
+      <h1 className="storyTitleCard">
+
         {title || "無題の物語"}
       </h1>
 

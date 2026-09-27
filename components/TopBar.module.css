@@ -20,14 +20,13 @@
     align-items: center;
 }
 
-.icon{
-    background-color: var(--color-primary-yellow);
-    color: var(--color-text-main);
-    width: 15%;
-    height: 60px;
-    font-size: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.icon {
+  background-color: var(--color-primary-yellow);
+  width: 15%;
+  height: 60px;
+  object-fit: contain;
+  padding: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

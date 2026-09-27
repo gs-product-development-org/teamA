@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { generateJson, isRateLimitError } from "@/lib/ai/groq";
-import { assertTextsAreSafe, ModerationFlaggedError } from "@/lib/ai/moderation";
+import {
+  assertTextsAreSafe,
+  ModerationFlaggedError,
+} from "@/lib/ai/moderation";
+import { MAX_WORD_LENGTH } from "@/lib/validations/word";
 
 const NOT_FOUND_TEXT = "辞書に登録されていません";
 
@@ -156,7 +160,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. 空白の除去と空文字の除外
+    // 2. 空白の除去と空文字の除外、および文字数上限チェック
     const cleanedWords = body.words
       .map((w) => (typeof w === "string" ? w.trim() : ""))
       .filter((w) => w.length > 0);
@@ -166,6 +170,18 @@ export async function POST(request: Request) {
         { error: "有効な英単語が指定されていません" },
         { status: 400 },
       );
+    }
+
+    // 各単語の文字数上限チェック（外部API乱用・DoS防止）
+    for (const word of cleanedWords) {
+      if (word.length > MAX_WORD_LENGTH) {
+        return NextResponse.json(
+          {
+            error: `英単語は${MAX_WORD_LENGTH}文字以内で入力してください（現在: ${word.length}文字）`,
+          },
+          { status: 400 },
+        );
+      }
     }
 
     // 3. Datamuse 辞書APIで全単語の実在チェックを並行実行

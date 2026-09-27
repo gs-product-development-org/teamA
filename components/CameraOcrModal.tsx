@@ -62,11 +62,23 @@ export default function CameraOcrModal({
     }
   };
 
+  // 全ての状態を初期化（リセット）する処理
+  const resetAllStates = () => {
+    stopCamera();
+    setCapturedImage(null);
+    setDetectedWords([]);
+    setSelectedWords([]);
+    setOcrError('');
+    setOcrProgress(0);
+    setCameraError('');
+    setIsAnalyzing(false);
+  };
+
   useEffect(() => {
     if (isOpen && !capturedImage) {
       startCamera();
-    } else {
-      stopCamera();
+    } else if (!isOpen) {
+      resetAllStates();
     }
 
     return () => {
@@ -214,12 +226,13 @@ export default function CameraOcrModal({
   // 確定
   const handleApply = () => {
     onApplyWords(selectedWords);
-    stopCamera();
+    resetAllStates();
     onClose();
   };
 
+  // モーダル閉じる（✕ボタン・キャンセルボタン）
   const handleModalClose = () => {
-    stopCamera();
+    resetAllStates();
     onClose();
   };
 
@@ -256,7 +269,7 @@ export default function CameraOcrModal({
                   autoPlay
                   playsInline
                   muted
-                  className="cameraVideo"
+                  className="w-full h-full object-contain"
                 />
 
                 <div className="cameraGuide">
@@ -300,26 +313,28 @@ export default function CameraOcrModal({
             </button>
           </div>
         ) : (
-          /* 解析結果 */
-          <div className="resultSection">
-            {/* プレビュー画像 */}
-            <div className="imagePreview">
+          /* 解析中・検出結果選択画面 */
+          <div className="flex flex-col">
+            {/* プレビュー画像（アスペクト比を維持して縦潰れ・横伸びを防止） */}
+            <div className="w-full bg-stone-900 rounded-xl overflow-hidden mb-2 border border-stone-200 flex items-center justify-center min-h-[160px] max-h-[220px]">
               <img
                 src={capturedImage}
                 alt="撮影プレビュー"
-                className="previewImage"
+                className="w-full h-full max-h-[220px] object-contain"
               />
-
-              <button
-                type="button"
-                onClick={handleRetake}
-                className="retakeButton"
-              >
-                再撮影
-              </button>
             </div>
 
-            {/* ローディング */}
+            {/* 画像のすぐ下に横長の再撮影ボタンを配置 */}
+            <button
+              type="button"
+              onClick={handleRetake}
+              className="w-full py-2.5 mb-3 bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-700 text-xs font-bold rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+            >
+              <span>🔄</span>
+              <span>再撮影する</span>
+            </button>
+
+            {/* 解析中ローディング（進捗％表示付き） */}
             {isAnalyzing && (
               <div className="ocrLoading">
                 <div className="loadingSpinner" />

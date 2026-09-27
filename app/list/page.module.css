@@ -7,8 +7,8 @@
 /* ========================================
    キーワード検索
    ======================================== */
-.searchInput{
-  background-color:white;
+.searchInput {
+  background-color: white;
   width: 100%;
   height: 35px;
   margin: 8px;
@@ -16,163 +16,276 @@
 }
 
 /* ========================================
-   2. タブ切り替え
+   2. タブ切り替え（重なりファイルフォルダー風）
    ======================================== */
-.tabs {
+.tabsContainer {
   display: flex;
-  justify-content: space-between;
-  padding: 16px 8px 6px 8px;
+  align-items: flex-end;
+  margin-top: 12px;
+  padding: 0 4px;
+  position: relative;
+  z-index: 10;
 }
 
-.tab {
-  padding: 10px 16px;
+/* 物語タブ (ピンク) */
+.storyTab {
+  flex: 1;
+  padding: 10px 14px;
   font-size: 0.875rem;
   font-weight: 700;
-  color: var(--color-text-main);
-  background-color: var(--color-primary-blue);
-  border: 1px solid var(--color-border);
-  border-bottom:1px solid var(--color-primary);
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  border: 3px solid var(--color-primary-pink);
+  border-bottom: none;
   cursor: pointer;
-  transition: all 0.15s ease-in-out;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  width: 49%;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  margin-right: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
-.tab.active {
+.storyTab.active {
   background-color: var(--color-primary-pink);
-  color: var(--color-text-main);
-  border-color: var(--color-primary);
+  color: white;
+  z-index: 20;
+  transform: translateY(0);
+  box-shadow: 0 -4px 10px rgba(254, 7, 218, 0.3);
+}
+
+.storyTab.inactive {
+  background-color: var(--color-primary-pink);
+  color: #171717;
+  border-color: var(--color-primary-pink);
+  opacity: 0.45;
+  z-index: 5;
+  transform: translateY(4px);
+}
+
+/* 単語タブ (水色) */
+.wordTab {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  border: 3px solid var(--color-primary-blue);
+  border-bottom: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.wordTab.active {
+  background-color: var(--color-primary-blue);
+  color: white;
+  z-index: 20;
+  transform: translateY(0);
+  box-shadow: 0 -4px 10px rgba(0, 204, 236, 0.3);
+}
+
+.wordTab.inactive {
+  background-color: var(--color-primary-blue);
+  color: #171717;
+  border-color: var(--color-primary-blue);
+  opacity: 0.45;
+  z-index: 5;
+  transform: translateY(4px);
 }
 
 /* ========================================
-   3. 物語
+   3. 物語（ピンクのファイルフォルダー本体）
    ======================================== */
-.story{
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  background-color: white;
-  margin: 0 8px;
-  /* 単語タブのテーブル高さと統一 thead 50px + tbody 630px*/
+.storyArea {
+  position: relative;
+  z-index: 15;
+  margin-top: -3px;
+  background-color: var(--color-primary-pink);
+  margin-left: 4px;
+  margin-right: 4px;
   max-height: 680px;
   overflow-y: auto;
   border: 3px solid var(--color-primary-pink);
+  border-radius: 0 14px 14px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
-.title{
-  font-size: 1rem;
+.story {
+  box-shadow: none;
+  background-color: var(--color-primary-pink);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.storyContainer {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  margin: 0;
+}
+
+.storyContainer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+.storyTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-primary-pink);
+}
+
+.title {
+  font-size: 0.95rem;
   font-weight: 700;
-  color: var(--color-text-main);
-  margin-bottom: 6px;
+  color: #1e293b;
+  line-height: 1.35;
+  margin: 0;
 }
 
-.contentDisplay {
-  margin: 8px;
-  border: 1px solid var(--color-primary-purple);
-}
-
-.titleLink{
-  color: var(--color-text-main);
+.titleLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  color:var(--color-primary-pink);
+  font-size: 1rem;
   font-weight: 800;
+  padding-left: 2px;
+  flex-shrink: 0;
+  margin-left: 8px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
+.storyDetail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.storyImage {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+}
 
 .storyText {
-  font-size: 0.875rem;
-  color: var(--color-text-main);
-  line-height: 1.4;
+  font-size: 0.825rem;
+  color: #475569;
+  line-height: 1.5;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
-  height: 50%;
-  margin: 8px;
+  margin: 0;
+  flex: 1;
 }
 
-.storyImage{
-  width: 50%;
-  border-radius: 8px;
+/* ========================================
+   4. 単語（水色のファイルフォルダー本体）
+   ======================================== */
+.wordArea {
+  position: relative;
+  z-index: 15;
+  margin-top: -3px;
+  background-color: var(--color-primary-blue);
+  margin-left: 4px;
+  margin-right: 4px;
+  max-height: 680px;
+  overflow-y: auto;
+  border: 3px solid var(--color-primary-blue);
+  border-radius: 14px 0 14px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
-.storyTitle{
+.wordList {
+  padding: 10px 8px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.storyDetail{
+.wordCard {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.storyContainer {
- background-color: #ffffff;
-  border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 0.05);
-  /* border: 1px solid var(--color-primary-hover); */
-}
-/* ========================================
-   4. 単語テーブル
-   ======================================== */
-
-.wordTable {
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 3px solid var(--color-primary-pink);
-  border-radius: 8px;
-  margin: 0 8px;
-  overflow: hidden;
+.wordCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.11);
 }
 
-.wordTable th {
-  background-color: white;
-  color: var(--color-text-main);
+.wordEnglish {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.wordDot {
+  color: var(--color-primary-blue);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.englishText {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.meaningsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.meaningTag {
+  background-color: #f0f9ff;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.emptyWordMessage {
+  text-align: center;
+  padding: 24px;
+  color: #ffffff;
   font-weight: 700;
   font-size: 0.875rem;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--color-border);
-  height: 50px;
-}
-
-.wordTable td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--color-border);
-  vertical-align: middle;
-  font-size: 0.875rem;
-  color: var(--color-text-main);
-}
-
-.wordTable tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.wordTable tbody tr:hover {
-  background-color: #f5f5f4;
-}
-
-.tableRow {
-  width: 50%;
-}
-
-.textCenter {
-  text-align: center;
-}
-
-.wordTable td:first-child {
-  font-weight: 600;
-  color: var(--color-text-main);
-}
-
-.wordTable td p {
-  margin: 2px 0;
-  line-height: 1.4;
-  color: var(--color-text-main);
-}
-
-.wordTable td p:first-child {
-  margin-top: 0;
-}
-
-.wordTable td p:last-child {
-  margin-bottom: 0;
 }
 
 /* 単語タブ内はスクロールで1画面に収める */
