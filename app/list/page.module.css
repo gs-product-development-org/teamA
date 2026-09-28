@@ -1,3 +1,23 @@
+.listHeader {
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+.headerSub {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-primary-pink);
+}
+
+.headerTitle {
+  margin-top: 4px;
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
 .boxCenter {
   display: flex;
   justify-content: center;

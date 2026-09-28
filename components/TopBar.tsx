@@ -1,18 +1,19 @@
 "use client";
+import Link from "next/link";
 import styles from "./TopBar.module.css";
 import "../app/globals.css";
 
 export default function TopBar() {
   return (
-     <div className={styles.headerBlock}>
-      <div className={styles.headerContainer}>
-        <header className={`font ${styles.header}`}>MONOGATAN</header>
+    <div className={styles.headerBlock}>
+      <Link href="/" className={styles.headerContainer}>
         <img
-          src="/seicyu_color3.PNG"
+          src="/monogatan-silk.png"
           alt="アイコン"
           className={styles.icon}
         />
-      </div>
+        <header className={`font ${styles.header}`}>MONOGATAN</header>
+      </Link>
     </div>
   );
 }

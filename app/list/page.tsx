@@ -98,9 +98,13 @@ export default function Tabs() {
   
   return (
     <div className={`container ${styles.listContainer}`}>
-      {/* <Link href="/register">
-        <p>物語登録画面へ</p>
-      </Link> */}
+      <header className={styles.listHeader}>
+        <p className={styles.headerSub}>
+          English Story List
+        </p>
+        <h1 className={styles.headerTitle}>Story & Words</h1>
+      </header>
+
       <div className={styles.boxCenter}>
         <input
           className={styles.searchInput}
