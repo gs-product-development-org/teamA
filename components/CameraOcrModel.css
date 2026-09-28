@@ -117,19 +117,21 @@
   align-items: center;
   justify-content: center;
 
-  background-color: #000000;
+  background-color: white;
   border-radius: 12px;
+   object-fit: cover;
 }
 
 .cameraVideo {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 16px;
 }
 
 .cameraGuide {
   position: absolute;
-  inset: 20px;
+  inset: 30px;
 
   display: flex;
   align-items: flex-end;
@@ -276,7 +278,7 @@
   height: 100%;
   max-height: 220px;
 
-  object-fit: contain;
+  object-fit: cover;
 }
 
 
