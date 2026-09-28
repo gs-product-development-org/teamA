@@ -1,0 +1,244 @@
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  color: var(--color-primary-blue);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.backButton:hover {
+  transform: translateX(-2px);
+}
+
+.saveButton {
+  padding: 8px 14px;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 12px;
+  background-color: var(--color-primary-blue);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.saveButton:hover {
+  background-color: #ffffff;
+  color: var(--color-primary-blue);
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ローディング */
+
+.loading {
+  padding: 30px 20px;
+  border: 3px solid var(--color-primary-blue);
+  border-radius: 16px;
+  background-color: #ffffff;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto 12px;
+  border: 3px solid var(--color-primary-blue);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingTitle {
+  margin: 0;
+  color: var(--color-primary-blue);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.loadingText {
+  margin: 4px 0 0;
+  color: #78716c;
+  font-size: 0.75rem;
+}
+
+/* エラー */
+
+.error {
+  margin-bottom: 10px;
+  padding: 16px;
+  border: 2px solid #f43f5e;
+  border-radius: 16px;
+  background-color: #fff1f2;
+  color: #be123c;
+  font-size: 0.875rem;
+}
+
+.errorTitle {
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+
+.errorMessage {
+  margin: 0 0 12px;
+}
+
+.retryButton {
+  padding: 8px 14px;
+  border: 2px solid #f43f5e;
+  border-radius: 10px;
+  background-color: #f43f5e;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background-color: #ffffff;
+  color: #f43f5e;
+}
+
+/* 画像生成エラー */
+
+.imageError {
+  margin: 0;
+  color: #e11d48;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* 和訳 */
+
+.translationSection {
+  position: relative;
+  background-color: var(--color-primary-blue);
+  border: 3px solid var(--color-primary-blue);
+  border-radius: 16px;
+  padding: 10px 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.translationButton {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: var(--color-primary-blue);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.translationButton:hover {
+  background-color: #eff6ff;
+  transform: translateY(-1px);
+}
+
+.translationIcon {
+  font-size: 1.125rem;
+  line-height: 1;
+  color: var(--color-primary-blue);
+}
+
+.translationText {
+  margin: 10px 0 0;
+  padding: 14px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: #44403c;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* アクションボタン */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.actionButton {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: var(--color-primary-blue);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  background-color: #eff6ff;
+  transform: translateY(-1px);
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.listButtonWrapper {
+  margin-top: 10px;
+}
+
+.listButton {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: var(--color-primary-blue);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.listButton:hover {
+  background-color: #eff6ff;
+  transform: translateY(-1px);
+}

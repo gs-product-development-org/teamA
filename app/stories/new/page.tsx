@@ -6,6 +6,8 @@ import StoryEnglishView, {
   type StoryWordInfo,
 } from "@/components/StoryEnglishView";
 
+import styles from "./page.module.css";
+
 // ※他者が作成した和訳コンポーネント用スロット
 // import JapaneseStoryView from '@/components/JapaneseStoryView';
 
@@ -245,59 +247,62 @@ export default function StoryGeneratorPage() {
   }, [generateStory]);
 
   return (
-    <main className="min-h-screen bg-stone-50 py-8 px-4 flex justify-center items-start text-stone-800">
-      <div className="w-full max-w-[393px]">
-        {/* ナビゲーションバー：一覧画面・保存アクション */}
-        <div className="mb-4 flex items-center justify-between">
+    // <main className={styles.main}>
+      <div className="container">
+
+        <div className={styles.navigation}>
           <button
             type="button"
             onClick={() => router.push("/register")}
-            className="text-xs font-medium text-stone-500 hover:text-stone-800 transition"
+            className={styles.backButton}
           >
             ← 単語登録へ
           </button>
 
-          {/* 物語保存ボタン */}
           <button
             type="button"
             onClick={saveStoryAndNavigate}
             disabled={isSaving || isLoading || !storyData}
-            className="text-xs font-bold text-white bg-stone-800 hover:bg-stone-900 disabled:opacity-40 disabled:cursor-not-allowed px-3.5 py-1.5 rounded-lg shadow-sm transition"
+            className={styles.saveButton}
           >
             {isSaving ? "保存中..." : "物語を保存"}
           </button>
         </div>
 
-        {/* 生成中ローディング */}
         {isLoading && (
-          <div className="bg-white rounded-2xl p-8 text-center border border-stone-200 shadow-sm">
-            <div className="animate-spin h-8 w-8 border-3 border-sky-600 border-t-transparent rounded-full mx-auto mb-3"></div>
-            <p className="text-sm font-bold text-stone-700">物語を生成中...</p>
-            <p className="text-xs text-stone-400 mt-1">
+          <div className={styles.loading}>
+            <div className={styles.spinner}></div>
+
+            <p className={styles.loadingTitle}>
+              物語を生成中...
+            </p>
+
+            <p className={styles.loadingText}>
               さっき登録した単語を使ってAIが執筆しています
             </p>
           </div>
         )}
 
-        {/* エラー表示と再試行ボタン */}
         {!isLoading && errorMessage && (
-          <div className="bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-2xl mb-4 text-xs">
-            <p className="font-bold mb-1">生成エラー</p>
-            <p className="mb-3">{errorMessage}</p>
+          <div className={styles.error}>
+            <p className={styles.errorTitle}>生成エラー</p>
+
+            <p className={styles.errorMessage}>
+              {errorMessage}
+            </p>
+
             <button
               type="button"
               onClick={generateStory}
-              className="bg-rose-600 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-rose-700 transition"
+              className={styles.retryButton}
             >
               もう一度試す
             </button>
           </div>
         )}
 
-        {/* 物語のメイン表示 */}
         {!isLoading && storyData && (
           <>
-            {/* あなたが担当するハイライト対応の英文共通部品 */}
             <StoryEnglishView
               title={storyData.title}
               story={storyData.story}
@@ -306,60 +311,63 @@ export default function StoryGeneratorPage() {
             />
 
             {imageErrorMessage && (
-              <p className="mb-4 text-xs text-rose-600">{imageErrorMessage}</p>
+              <p className={styles.imageError}>
+                {imageErrorMessage}
+              </p>
             )}
 
-            <section className="mb-4 bg-white rounded-2xl border border-stone-200 shadow-sm">
+            <section className={styles.translationSection}>
               <button
                 type="button"
                 onClick={() => setIsJapaneseVisible((visible) => !visible)}
                 aria-expanded={isJapaneseVisible}
-                className="w-full flex items-center justify-between gap-3 p-4 text-left text-sm font-bold text-stone-700"
+                className={styles.translationButton}
               >
                 <span>和訳を見る</span>
+
                 <span
                   aria-hidden="true"
-                  className="text-sky-600 text-lg leading-none"
+                  className={styles.translationIcon}
                 >
                   {isJapaneseVisible ? "−" : "+"}
                 </span>
               </button>
+
               {isJapaneseVisible && (
-                <p className="border-t border-stone-100 p-4 text-sm leading-relaxed text-stone-600 whitespace-pre-wrap">
+                <p className={styles.translationText}>
                   {storyData.japaneseStory}
                 </p>
               )}
             </section>
 
-            {/* アクションボタン（再生成 ＆ 一覧へ戻る） */}
-            <div className="flex flex-col gap-2.5">
+            <div className={styles.actions}>
               <button
                 type="button"
                 onClick={() => void generateImage(storyData)}
                 disabled={isLoading || isImageLoading}
-                className="w-full py-2.5 bg-white border border-stone-300 text-stone-700 hover:bg-stone-50 font-bold rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-1.5 disabled:opacity-50"
+                className={styles.actionButton}
               >
                 <span>🖼️</span>
-                <span>{isImageLoading ? '画像生成中...' : '画像を再生成する'}</span>
+                <span>
+                  {isImageLoading ? "画像生成中..." : "画像を再生成する"}
+                </span>
               </button>
 
-              {/* 物語再生成ボタン */}
               <button
                 type="button"
                 onClick={generateStory}
                 disabled={isImageLoading || isLoading}
-                className="w-full py-2.5 bg-white border border-stone-300 text-stone-700 hover:bg-stone-50 font-bold rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-1.5"
+                className={styles.actionButton}
               >
                 <span>🔄</span>
                 <span>別の物語を再生成する</span>
               </button>
 
-              {/* 誤操作防止のために間隔を広げた一覧へ戻るボタン */}
-              <div className="mt-4">
+              <div className={styles.listButtonWrapper}>
                 <button
                   type="button"
                   onClick={() => router.push("/list")}
-                  className="w-full py-2.5 bg-white border border-stone-300 hover:border-stone-400 hover:bg-stone-50 text-stone-700 font-bold rounded-xl text-sm transition shadow-xs text-center cursor-pointer"
+                  className={styles.listButton}
                 >
                   保存せずに一覧画面に戻る
                 </button>
@@ -368,6 +376,6 @@ export default function StoryGeneratorPage() {
           </>
         )}
       </div>
-    </main>
+    // </main>
   );
 }
