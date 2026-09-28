@@ -1,0 +1,382 @@
+ .navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.navHeader {
+  display: flex;
+  align-items: center;
+}
+
+.returnButtonLink {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.returnButtonLink:hover {
+  transform: translateX(-2px);
+}
+
+.returnImage {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.disabledReturnButton {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  color: var(--color-primary-blue);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.backButton:hover {
+  transform: translateX(-2px);
+}
+
+.saveButton {
+  padding: 8px 14px;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 12px;
+  background-color: var(--color-primary-blue);
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.saveButton:hover {
+  background-color: #ffffff;
+  color: var(--color-primary-blue);
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ローディング */
+
+.loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: calc(100% - 32px);
+  max-width: 360px;
+  box-sizing: border-box;
+
+  padding: 30px 20px;
+
+  border: 3px solid var(--color-primary-blue);
+  border-radius: 16px;
+
+  background-color: #ffffff;
+
+  text-align: center;
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+
+  z-index: 1000;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto 12px;
+  border: 3px solid var(--color-primary-blue);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingTitle {
+  margin: 0;
+  color: var(--color-primary-blue);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.loadingText {
+  margin: 4px 0 0;
+  color: #78716c;
+  font-size: 1rem;
+}
+.loadingImages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+
+.loadingImageRotate {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  animation: rotate 1.5s linear infinite;
+}
+
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* エラー */
+
+.error {
+  margin-bottom: 10px;
+  padding: 16px;
+  border: 2px solid #f43f5e;
+  border-radius: 16px;
+  background-color: #fff1f2;
+  color: #be123c;
+  font-size: 0.875rem;
+}
+
+.errorTitle {
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+
+.errorMessage {
+  margin: 0 0 12px;
+}
+
+.retryButton {
+  padding: 8px 14px;
+  border: 2px solid #f43f5e;
+  border-radius: 10px;
+  background-color: #f43f5e;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background-color: #ffffff;
+  color: #f43f5e;
+}
+
+/* 画像生成エラー */
+
+.imageError {
+  margin: 0;
+  color: #e11d48;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* 和訳 */
+
+.translationSection {
+  position: relative;
+  background-color: var(--color-primary-blue);
+  border-radius: 16px;
+  padding: 10px 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.translationButton {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 12px;
+  background-color: white;
+  color: var(--color-primary-blue);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.translationButton:hover {
+  background-color: #eff6ff;
+  transform: translateY(-1px);
+}
+
+.translationIcon {
+  font-size: 1.125rem;
+  line-height: 1;
+  color: var(--color-primary-blue);
+}
+
+.translationText {
+  margin: 10px 0 0;
+  padding: 14px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: #44403c;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* アクションボタン */
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.actionButton {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 8px;
+  border: 3px solid var(--color-primary-purple);
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: var(--color-primary-purple);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.retryIcon{
+  width: 20px;
+}
+
+.listButtonWrapper {
+  flex: 1;
+  margin-top: 0;
+}
+
+.listButton {
+  width: 100%;
+  height: 100%;
+  padding: 11px 8px;
+  border-radius: 12px;
+  background-color:#ffffff;
+   border: 5px solid var(--color-primary-green);
+   color:black;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+}
+
+.returnIcon{
+  width: 24px;
+  margin-right: 8px;
+}
+/* 
+アラートのモーダル */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgb(0 0 0 / 50%);
+  padding: 16px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 340px;
+  padding: 24px;
+  border: 3px solid var(--color-primary-pink);
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 20%);
+}
+
+.modalTitle {
+  margin: 0 0 10px;
+
+  color: #1e293b;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.modalText {
+  margin: 0 0 20px;
+
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.modalActions {
+  display: flex;
+  gap: 8px;
+}
+
+.modalCancelButton,
+.modalLeaveButton {
+  flex: 1;
+
+  padding: 10px 12px;
+
+  border-radius: 10px;
+
+  font-size: 1rem;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.modalCancelButton {
+  border: 2px solid var(--color-primary-pink);
+  background-color: #ffffff;
+  color: black;
+}
+
+.modalLeaveButton {
+  border: 2px solid var(--color-primary-pink);
+  background-color: var(--color-primary-pink);
+  color: black;
+}

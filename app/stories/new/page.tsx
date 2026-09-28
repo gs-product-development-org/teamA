@@ -6,6 +6,9 @@ import StoryEnglishView, {
   type StoryWordInfo,
 } from "@/components/StoryEnglishView";
 
+import styles from "./page.module.css";
+import Link from "next/link";
+
 // ※他者が作成した和訳コンポーネント用スロット
 // import JapaneseStoryView from '@/components/JapaneseStoryView';
 
@@ -62,6 +65,7 @@ function getRegisteredWords(value: unknown): RegisteredWord[] {
 }
 
 export default function StoryGeneratorPage() {
+  const [isBackModalOpen, setIsBackModalOpen] = useState<boolean>(false);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -201,6 +205,40 @@ export default function StoryGeneratorPage() {
     setErrorMessage("");
 
     try {
+      // sessionStorage から登録済み単語データを取得（meaning_id の二重保護）
+      let registeredWords: RegisteredWord[] = [];
+      try {
+        const stored = sessionStorage.getItem("latestRegisteredWords");
+        if (stored) {
+          registeredWords = getRegisteredWords(JSON.parse(stored));
+        }
+      } catch {
+        // 読み込み失敗時はフォールバック
+      }
+
+      const wordsPayload = (storyData.words || []).map((word) => {
+        let mId = Number(word.meaningId);
+        // meaningId が不自然な場合、登録済み単語リストからスペル一致で復元
+        if (!Number.isFinite(mId) || mId <= 0) {
+          const matched = registeredWords.find(
+            (rw) =>
+              (rw.english && rw.english.toLowerCase() === word.word?.toLowerCase()) ||
+              (rw.word && rw.word.toLowerCase() === word.word?.toLowerCase()),
+          );
+          if (matched) {
+            const resolvedId = Number(matched.meaning_id || matched.meaningId);
+            if (Number.isFinite(resolvedId) && resolvedId > 0) {
+              mId = resolvedId;
+            }
+          }
+        }
+
+        return {
+          meaningId: mId,
+          surfaces: word.surfaces || [],
+        };
+      });
+
       const saveRes = await fetch("/api/stories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -210,10 +248,7 @@ export default function StoryGeneratorPage() {
           story: storyData.story,
           japaneseStory: storyData.japaneseStory,
           imageUrl: storyData.imageUrl,
-          words: storyData.words.map((word) => ({
-            meaningId: word.meaningId,
-            surfaces: word.surfaces || [],
-          })),
+          words: wordsPayload,
         }),
       });
 
@@ -244,144 +279,162 @@ export default function StoryGeneratorPage() {
     return () => window.clearTimeout(timerId);
   }, [generateStory]);
 
+
   return (
-    <main className="min-h-screen bg-stone-50 py-8 px-4 flex justify-center items-start text-stone-800">
-      <div className="w-full max-w-[393px]">
-        {/* ナビゲーションバー：一覧画面・保存アクション */}
-        <div className="mb-4 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => router.push("/register")}
-            className="text-xs font-medium text-stone-500 hover:text-stone-800 transition"
-          >
-            ← 単語登録へ
-          </button>
+    <div className="container">
 
-          {/* 物語保存ボタン */}
-          <button
-            type="button"
-            onClick={saveStoryAndNavigate}
-            disabled={isSaving || isLoading || !storyData}
-            className="text-xs font-bold text-white bg-stone-800 hover:bg-stone-900 disabled:opacity-40 disabled:cursor-not-allowed px-3.5 py-1.5 rounded-lg shadow-sm transition"
-          >
-            {isSaving ? "保存中..." : "物語を保存"}
-          </button>
-        </div>
+      <div className={styles.navigation}>
+     <Link
+        href="/register"
+        className={`${styles.returnButtonLink} ${
+          isLoading ? styles.disabledReturnButton : ""
+        }`}
+        aria-disabled={isLoading}
+        onClick={(e) => {
+          if (isLoading) {
+            e.preventDefault();
+            return;
+          }
 
-        {/* 生成中ローディング */}
-        {isLoading && (
-          <div className="bg-white rounded-2xl p-8 text-center border border-stone-200 shadow-sm">
-            <div className="animate-spin h-8 w-8 border-3 border-sky-600 border-t-transparent rounded-full mx-auto mb-3"></div>
-            <p className="text-sm font-bold text-stone-700">物語を生成中...</p>
-            <p className="text-xs text-stone-400 mt-1">
-              さっき登録した単語を使ってAIが執筆しています
+          e.preventDefault();
+          setIsBackModalOpen(true);
+        }}
+      >
+        <img
+          src="/return.png"
+          alt="Back button"
+          className={styles.returnImage}
+        />
+      </Link>
+
+        <button
+          type="button"
+          onClick={saveStoryAndNavigate}
+          disabled={isSaving || isLoading || !storyData}
+          className={styles.saveButton}
+        >
+          {isSaving ? "Saving..." : "Save Story"}
+        </button>
+      </div>
+
+     {isLoading && (
+        <div className={styles.loadingOverlay}>
+          <div className={styles.loading}>
+            <div className={styles.loadingImages}>
+               <img
+                src="/youcyu01_color.png"
+                alt=""
+                className={styles.loadingImageRotate}
+              />
+            </div>
+
+            <p className={styles.loadingTitle}>
+              Generating story...
+            </p>
+
+            <p className={styles.loadingText}>
+              AI is writing a story using the words you just registered.
             </p>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* エラー表示と再試行ボタン */}
-        {!isLoading && errorMessage && (
-          <div className="bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-2xl mb-4 text-xs">
-            <div className="flex items-center gap-2 mb-2">
-              <img
-                src="/seicyu_sad.PNG"
-                alt="エラー"
-                className="w-8 h-8 object-contain flex-shrink-0"
-              />
-              <p className="font-bold text-sm">Generation Error</p>
-            </div>
-            <p className="mb-3">{errorMessage}</p>
+      {!isLoading && errorMessage && (
+        <div className={styles.error}>
+          <p className={styles.errorTitle}>
+            Generation Error
+          </p>
+
+          <p className={styles.errorMessage}>
+            {errorMessage}
+          </p>
+
+          <button
+            type="button"
+            onClick={generateStory}
+            className={styles.retryButton}
+          >
+            Try Again
+          </button>
+        </div>
+      )}
+
+      {!isLoading && storyData && (
+        <>
+          <StoryEnglishView
+            title={storyData.title}
+            story={storyData.story}
+            words={storyData.words}
+            imageUrl={storyData.imageUrl}
+            onRegenerateStory={generateStory}
+            onRegenerateImage={() => void generateImage(storyData)}
+            isImageLoading={isImageLoading}
+            isStoryLoading={isLoading}
+          />
+
+          {imageErrorMessage && (
+            <p className={styles.imageError}>
+              {imageErrorMessage}
+            </p>
+          )}
+
+          <section className={styles.translationSection}>
             <button
               type="button"
-              onClick={generateStory}
-              className="bg-rose-600 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-rose-700 transition"
+              onClick={() => setIsJapaneseVisible((visible) => !visible)}
+              aria-expanded={isJapaneseVisible}
+              className={styles.translationButton}
             >
-              もう一度試す
+              <span>View Japanese Translation</span>
+
+              <span
+                aria-hidden="true"
+                className={styles.translationIcon}
+              >
+                {isJapaneseVisible ? "−" : "+"}
+              </span>
+            </button>
+
+            {isJapaneseVisible && (
+              <p className={styles.translationText}>
+                {storyData.japaneseStory}
+              </p>
+            )}
+          </section>
+        </>
+      )}
+      {isBackModalOpen && (
+      <div className={styles.modalOverlay}>
+        <div className={styles.modal}>
+          <h2 className={styles.modalTitle}>
+            Leave this page?
+          </h2>
+
+          <p className={styles.modalText}>
+            The generated story will not be saved.
+          </p>
+
+          <div className={styles.modalActions}>
+            <button
+              type="button"
+              onClick={() => setIsBackModalOpen(false)}
+              className={styles.modalCancelButton}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/register")}
+              className={styles.modalLeaveButton}
+            >
+              Leave
             </button>
           </div>
-        )}
-
-        {/* 物語のメイン表示 */}
-        {!isLoading && storyData && (
-          <>
-            {/* あなたが担当するハイライト対応の英文共通部品 */}
-            <StoryEnglishView
-              title={storyData.title}
-              story={storyData.story}
-              words={storyData.words}
-              imageUrl={storyData.imageUrl}
-            />
-
-            {imageErrorMessage && (
-              <div className="mb-4 flex items-center gap-2 text-xs text-rose-600">
-                <img
-                  src="/seicyu_sad.PNG"
-                  alt="エラー"
-                  className="w-5 h-5 object-contain flex-shrink-0"
-                />
-                <p>{imageErrorMessage}</p>
-              </div>
-            )}
-
-            <section className="mb-4 bg-white rounded-2xl border border-stone-200 shadow-sm">
-              <button
-                type="button"
-                onClick={() => setIsJapaneseVisible((visible) => !visible)}
-                aria-expanded={isJapaneseVisible}
-                className="w-full flex items-center justify-between gap-3 p-4 text-left text-sm font-bold text-stone-700"
-              >
-                <span>和訳を見る</span>
-                <span
-                  aria-hidden="true"
-                  className="text-sky-600 text-lg leading-none"
-                >
-                  {isJapaneseVisible ? "−" : "+"}
-                </span>
-              </button>
-              {isJapaneseVisible && (
-                <p className="border-t border-stone-100 p-4 text-sm leading-relaxed text-stone-600 whitespace-pre-wrap">
-                  {storyData.japaneseStory}
-                </p>
-              )}
-            </section>
-
-            {/* アクションボタン（再生成 ＆ 一覧へ戻る） */}
-            <div className="flex flex-col gap-2.5">
-              <button
-                type="button"
-                onClick={() => void generateImage(storyData)}
-                disabled={isLoading || isImageLoading}
-                className="w-full py-2.5 bg-white border border-stone-300 text-stone-700 hover:bg-stone-50 font-bold rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-1.5 disabled:opacity-50"
-              >
-                <span>🖼️</span>
-                <span>{isImageLoading ? '画像生成中...' : '画像を再生成する'}</span>
-              </button>
-
-              {/* 物語再生成ボタン */}
-              <button
-                type="button"
-                onClick={generateStory}
-                disabled={isImageLoading || isLoading}
-                className="w-full py-2.5 bg-white border border-stone-300 text-stone-700 hover:bg-stone-50 font-bold rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-1.5"
-              >
-                <span>🔄</span>
-                <span>別の物語を再生成する</span>
-              </button>
-
-              {/* 誤操作防止のために間隔を広げた一覧へ戻るボタン */}
-              <div className="mt-4">
-                <button
-                  type="button"
-                  onClick={() => router.push("/list")}
-                  className="w-full py-2.5 bg-white border border-stone-300 hover:border-stone-400 hover:bg-stone-50 text-stone-700 font-bold rounded-xl text-sm transition shadow-xs text-center cursor-pointer"
-                >
-                  保存せずに一覧画面に戻る
-                </button>
-              </div>
-            </div>
-          </>
-        )}
+        </div>
       </div>
-    </main>
+    )}
+    </div>
+    
   );
 }

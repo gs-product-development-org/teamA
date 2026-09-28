@@ -90,35 +90,63 @@ export async function POST(request: Request) {
       .single();
 
     if (storyError || !storyData) {
+      console.error(
+        "[POST /api/stories] storiesテーブル保存エラー:",
+        storyError,
+      );
       return NextResponse.json(
-        { error: "物語の登録処理中に予期せぬエラーが発生しました" },
+        {
+          error: `物語の登録処理中にエラーが発生しました: ${storyError?.message || "不明なエラー"}`,
+        },
         { status: 500 },
       );
     }
 
     // 5. meaning_story 中間テーブルに単語・活用形を保存
     if (body.words.length > 0) {
-      const relationRecords = body.words.map((item) => ({
-        story_id: storyData.story_id,
-        meaning_id: item.meaningId,
-        surfaces: Array.isArray(item.surfaces) ? item.surfaces : [],
-      }));
+      // 重複する meaningId を排除（同一 story_id に同一 meaning_id が複数あると主キー重複エラーになる）
+      const seenMeaningIds = new Set<number>();
+      const relationRecords: {
+        story_id: number;
+        meaning_id: number;
+        surfaces: string[];
+      }[] = [];
 
-      const { error: relationError } = await supabase
-        .from("meaning_story")
-        .insert(relationRecords);
+      for (const item of body.words) {
+        const mId = Number(item.meaningId);
+        if (Number.isFinite(mId) && mId > 0 && !seenMeaningIds.has(mId)) {
+          seenMeaningIds.add(mId);
+          relationRecords.push({
+            story_id: storyData.story_id,
+            meaning_id: mId,
+            surfaces: Array.isArray(item.surfaces) ? item.surfaces : [],
+          });
+        }
+      }
 
-      if (relationError) {
-        // データ不整合（孤立レコード）を防ぐため、作成した story を削除してロールバック
-        await supabase
-          .from("stories")
-          .delete()
-          .eq("story_id", storyData.story_id);
+      if (relationRecords.length > 0) {
+        const { error: relationError } = await supabase
+          .from("meaning_story")
+          .insert(relationRecords);
 
-        return NextResponse.json(
-          { error: "物語と単語の紐付け登録に失敗しました" },
-          { status: 500 },
-        );
+        if (relationError) {
+          console.error(
+            "[POST /api/stories] meaning_story保存エラー:",
+            relationError,
+          );
+          // データ不整合（孤立レコード）を防ぐため、作成した story を削除してロールバック
+          await supabase
+            .from("stories")
+            .delete()
+            .eq("story_id", storyData.story_id);
+
+          return NextResponse.json(
+            {
+              error: `物語と単語の紐付け登録に失敗しました: ${relationError.message}`,
+            },
+            { status: 500 },
+          );
+        }
       }
     }
 
@@ -133,9 +161,11 @@ export async function POST(request: Request) {
     };
 
     return NextResponse.json(responseData, { status: 200 });
-  } catch (err) {
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[POST /api/stories] 予期せぬ例外:", err);
     return NextResponse.json(
-      { error: "物語の登録処理中に予期せぬエラーが発生しました" },
+      { error: `物語の登録処理中に予期せぬエラーが発生しました: ${message}` },
       { status: 500 },
     );
   }

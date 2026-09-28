@@ -82,11 +82,11 @@ export default function DetailStoryEnglishView({
   };
 
   return (
-    <div className="storyView">
+   <div className="storyView">
 
       {/* 物語タイトル */}
       <h1 className="storyTitleCard">
-
+ 
         {title || "無題の物語"}
       </h1>
 

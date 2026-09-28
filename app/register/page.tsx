@@ -15,11 +15,11 @@ const MAX_WORDS = 5;
 const NOT_FOUND_TEXT = "辞書に登録されていません";
 
 const GENRE_OPTIONS = [
-  "日常",
-  "ファンタジー",
-  "SF",
-  "ミステリー",
-  "冒険",
+  { value: "日常", label: "Daily Life" },
+  { value: "ファンタジー", label: "Fantasy" },
+  { value: "SF", label: "Sci-Fi" },
+  { value: "ミステリー", label: "Mystery" },
+  { value: "冒険", label: "Adventure" },
 ] as const;
 
 export default function WordRegisterPage() {
@@ -47,7 +47,6 @@ export default function WordRegisterPage() {
       setErrorMessage("");
     }
 
-    // 既存の単語のうち入力があるものを保持（初期状態の空行などは除外）
     const existingWords = words.filter(
       (w) => w.english.trim() !== "" || w.japanese.trim() !== ""
     );
@@ -63,7 +62,6 @@ export default function WordRegisterPage() {
     );
 
     const mergedWords = [...existingWords, ...cameraWordItems];
-
     setWords(mergedWords);
 
     // 5件を超えている場合は注意メッセージを表示
@@ -422,7 +420,7 @@ export default function WordRegisterPage() {
 
   return (
     <main>
-      <div className={`container ${styles.registerContainer}`}>
+      <div className="container">
         <div className={styles.registerHeader}>
           <div>
             <p className={styles.headerSub}>
@@ -469,8 +467,8 @@ export default function WordRegisterPage() {
               </option>
 
               {GENRE_OPTIONS.map((option) => (
-                <option key={option} value={option}>
-                  {option}
+                <option key={option.value} value={option.value}>
+                  {option.label}
                 </option>
               ))}
             </select>
@@ -515,12 +513,7 @@ export default function WordRegisterPage() {
 
         {errorMessage && (
           <div className={styles.errorMessage}>
-            <img
-              src="/seicyu_sad.PNG"
-              alt="エラー"
-              className={styles.errorIcon}
-            />
-            <span>{errorMessage}</span>
+            {errorMessage}
           </div>
         )}
 
