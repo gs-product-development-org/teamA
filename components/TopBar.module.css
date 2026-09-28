@@ -1,23 +1,32 @@
  .headerBlock {
-  display: flex;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   height: 60px;
   z-index: 999;
+  background-color: var(--color-primary-yellow);
 }
 
-.header{
-    background-color: var(--color-primary-yellow);
-    color: var(--color-text-main);
-    width: 85%;
-    height: 60px;
-    font-size: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.headerContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 393px;
+  height: 60px;
+  margin: 0 auto;
+}
+
+.header {
+  background-color: var(--color-primary-yellow);
+  color: var(--color-text-main);
+  width: 85%;
+  height: 60px;
+  font-size: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .icon {
@@ -26,7 +35,4 @@
   height: 60px;
   object-fit: contain;
   padding: 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
