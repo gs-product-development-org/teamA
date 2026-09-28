@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+import "./StoryEnglishView.css";
+
 export interface StoryWordInfo {
   meaningId: number;
   word: string;
@@ -11,8 +13,14 @@ export interface StoryWordInfo {
 interface StoryEnglishViewProps {
   title: string;
   story: string;
-  words?: StoryWordInfo[];
+  words: StoryWordInfo[];
   imageUrl?: string;
+
+  onRegenerateStory?: () => void;
+  onRegenerateImage?: () => void;
+
+  isImageLoading?: boolean;
+  isStoryLoading?: boolean;
 }
 
 export default function StoryEnglishView({
@@ -20,7 +28,12 @@ export default function StoryEnglishView({
   story,
   words = [],
   imageUrl,
+  onRegenerateStory,
+  onRegenerateImage,
+  isImageLoading,
+  isStoryLoading,
 }: StoryEnglishViewProps) {
+
   // 返り値: 本文中の学習対象語をハイライトしたReactノードの配列
   const renderHighlightedStory = () => {
     const allSurfaces = Array.from(
@@ -37,12 +50,19 @@ export default function StoryEnglishView({
       return story;
     }
 
-    const sortedSurfaces = [...allSurfaces].sort((a, b) => b.length - a.length);
-    const escapedTerms = sortedSurfaces.map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const sortedSurfaces = [...allSurfaces].sort(
+      (a, b) => b.length - a.length
+    );
+
+    const escapedTerms = sortedSurfaces.map((s) =>
+      s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    );
+
     const regex = new RegExp(
       `(?<![A-Za-z])(?:${escapedTerms.join('|')})(?![A-Za-z])`,
       'gi',
     );
+
     const parts: React.ReactNode[] = [];
     let lastIndex = 0;
 
@@ -57,11 +77,12 @@ export default function StoryEnglishView({
       parts.push(
         <mark
           key={`${matchIndex}-${matchedText}`}
-          className="bg-amber-100 text-amber-900 font-semibold px-1 py-0.5 rounded border-b-2 border-amber-300"
+          className="highlight"
         >
           {matchedText}
         </mark>,
       );
+
       lastIndex = matchIndex + matchedText.length;
     }
 
@@ -73,43 +94,89 @@ export default function StoryEnglishView({
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 mb-6">
-      {imageUrl && (
-        <div className="mb-4 overflow-hidden rounded-xl border border-stone-100">
-          <img src={imageUrl} alt={title || '物語の画像'} className="h-auto w-full" />
+    <div className="storyContainer">
+
+        {/* 物語タイトル */}
+        <div className="titleBox">
+          <h2 className="title">
+            {title || "無題の物語"}
+          </h2>
         </div>
-      )}
 
-      {/* 物語タイトル */}
-      <h2 className="text-xl font-bold text-stone-800 mb-4 pb-2 border-b border-stone-100 flex items-center gap-2">
-        <span className="text-sky-600">📖</span>
-        {title || '無題の物語'}
-      </h2>
+       <div className="storyContents">
 
-      {/* ハイライト付き英文本文 */}
-      <div className="bg-stone-50 rounded-xl p-5 border border-stone-100">
-        <p className="text-base sm:text-lg leading-relaxed text-stone-700 font-serif whitespace-pre-wrap">
-          {renderHighlightedStory()}
-        </p>
+  {imageUrl && (
+    <div className="imageContainer">
+
+      <button
+        type="button"
+        onClick={onRegenerateImage}
+        disabled={isImageLoading || isStoryLoading}
+        className="regenerateImageButton"
+      >
+        <img
+        src="/returnPurple.png"
+        alt=""
+        className="retryIcon"
+      />
+        {isImageLoading ? "Generating..." : "Regenerate"}
+      </button>
+
+      <img
+        src={imageUrl}
+        alt={title || "物語の画像"}
+        className="storyImage"
+      />
+
+    </div>
+  )}
+
+  <div className="storyTextContainer">
+
+    <button
+      type="button"
+      onClick={onRegenerateStory}
+      disabled={isStoryLoading || isImageLoading}
+      className="regenerateStoryButton"
+    >
+      <img
+        src="/returnPurple.png"
+        alt=""
+        className="retryIcon"
+      />
+      Regenerate
+    </button>
+
+    <p className="storyText">
+      {renderHighlightedStory()}
+    </p>
+
+  </div>
+
+        {/* 登場単語のタグ一覧 */}
+        {words.length > 0 && (
+          <div className="wordList">
+            <span className="wordLabel">対象単語:</span>
+
+            {words.map((item) => (
+              <span
+                key={item.meaningId}
+                className="wordTag"
+              >
+                {item.word}
+
+                {item.surfaces?.[0] &&
+                  item.surfaces[0].toLowerCase() !==
+                    item.word.toLowerCase() && (
+                    <span className="surface">
+                      ({item.surfaces[0]})
+                    </span>
+                  )}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
-
-      {/* 登場単語のタグ一覧 */}
-      {words.length > 0 && (
-        <div className="mt-4 pt-3 flex flex-wrap items-center gap-2">
-          <span className="text-xs font-semibold text-stone-400">対象単語:</span>
-          {words.map((item) => (
-            <span
-              key={item.meaningId}
-              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-50 text-sky-700 border border-sky-100"
-            >
-              {item.word}
-              {item.surfaces?.[0] && item.surfaces[0].toLowerCase() !== item.word.toLowerCase() && (
-                <span className="text-sky-400 ml-1">({item.surfaces[0]})</span>
-              )}
-            </span>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

@@ -1,0 +1,173 @@
+.storyContainer {
+  margin-bottom: 16px;
+  padding: 10px 8px;
+  border-radius: 16px;
+  border: 3px solid var(--color-primary-blue);
+  background-color: var(--color-primary-blue);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.storyContents,.titleBox{
+    background-color: white;
+    border-radius: 16px;
+    padding: 16px;
+}
+
+/* 画像 */
+
+.imageContainer {
+  margin-bottom: 16px;
+  overflow: hidden;
+  border: 1px solid #f5f5f4;
+  border-radius: 12px;
+}
+
+.storyImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* タイトル */
+
+.titleBox{
+  margin-bottom: 10px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #292524;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.titleIcon {
+  color: var(--color-primary-blue);
+}
+
+/* 英文 */
+
+.storyTextContainer {
+  color: #334155;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  margin: 0;
+  padding: 46px 14px 12px 14px;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.storyText {
+  margin: 0;
+  color: #44403c;
+  font-size: 1rem;
+  line-height: 1.625;
+  white-space: pre-wrap;
+}
+
+/* ハイライト */
+
+.highlight {
+  background-color: #fef08a;
+  color: #854d0e;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-bottom: 2px solid #eab308;
+  border-radius: 6px;
+  margin: 0 1px;
+}
+
+/* 単語一覧 */
+
+.wordList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+}
+
+.wordLabel {
+  color: #a8a29e;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.wordTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border: 1px solid #bfdbfe;
+  border-radius: 9999px;
+  background-color: #eff6ff;
+  color: #0369a1;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.surface {
+  margin-left: 4px;
+  color: #60a5fa;
+}
+
+/* スマートフォンより少し広い画面 */
+
+@media (min-width: 640px) {
+  .storyText {
+    font-size: 1.125rem;
+  }
+}
+
+.imageContainer {
+  position: relative;
+}
+
+.storyTextContainer {
+  position: relative;
+}
+
+.regenerateImageButton,
+.regenerateStoryButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+
+  padding: 6px 10px;
+  border: 2px solid var(--color-primary-purple);
+  border-radius: 8px;
+
+  background-color: #ffffff;
+  color: var(--color-primary-purple);
+
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  cursor: pointer;
+}
+
+/* .regenerateImageButton:hover,
+.regenerateStoryButton:hover {
+  background-color: rgb(166, 165, 165);
+  color: #ffffff;
+} */
+
+.regenerateImageButton:disabled,
+.regenerateStoryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.retryIcon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
