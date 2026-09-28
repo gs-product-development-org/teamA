@@ -90,8 +90,8 @@ export default function StoryGeneratorPage() {
       if (!imageRes.ok || !imageJson.success || !imageJson.image?.url) {
         throw new Error(
           imageRes.status === 429
-            ? "AIの利用制限に達しました。しばらく時間を置いてから再度お試しください"
-            : imageJson.error || "画像の生成に失敗しました",
+            ? "AI rate limit reached. Please wait a moment and try again."
+            : imageJson.error || "Failed to generate image.",
         );
       }
 
@@ -104,7 +104,7 @@ export default function StoryGeneratorPage() {
     } catch (error: unknown) {
       console.error("画像生成エラー:", error);
       setImageErrorMessage(
-        error instanceof Error ? error.message : "画像の生成に失敗しました",
+        error instanceof Error ? error.message : "Failed to generate image.",
       );
     } finally {
       setIsImageLoading(false);
@@ -122,19 +122,19 @@ export default function StoryGeneratorPage() {
       const savedData = sessionStorage.getItem("latestRegisteredWords");
       if (!savedData) {
         throw new Error(
-          "登録された単語データが見つかりません。単語登録画面からやり直してください。",
+          "Registered word data not found. Please start over from the word registration page.",
         );
       }
 
       const registeredWords = getRegisteredWords(JSON.parse(savedData));
 
       if (registeredWords.length === 0) {
-        throw new Error("登録された単語リストが空です。");
+        throw new Error("Registered word list is empty.");
       }
 
       const genre = sessionStorage.getItem("latestStoryGenre");
       if (!genre) {
-        throw new Error("物語のジャンルが見つかりません。単語登録画面からやり直してください。");
+        throw new Error("Story genre not found. Please start over from the word registration page.");
       }
 
       // 返り値: 物語生成APIが受け取る単語情報の配列
@@ -153,7 +153,7 @@ export default function StoryGeneratorPage() {
             !Number.isFinite(word.meaningId) || !word.word || !word.meaning,
         )
       ) {
-        throw new Error("登録された単語データの形式が不正です。");
+        throw new Error("Invalid format for registered word data.");
       }
 
       // 3. 物語生成API（POST /api/stories/generate）を実行
@@ -168,11 +168,11 @@ export default function StoryGeneratorPage() {
       if (!genRes.ok) {
         throw new Error(
           genRes.status === 429
-            ? "AIの利用制限に達しました。しばらく時間を置いてから再度お試しください"
+            ? "AI rate limit reached. Please wait a moment and try again."
             : genRes.status >= 500
-              ? "物語生成サーバーでエラーが発生しました。時間を置いて再試行してください。"
+              ? "Story generation server error. Please try again later."
               : genJson.error ||
-                `物語の生成に失敗しました (Status: ${genRes.status})`,
+                `Failed to generate story (Status: ${genRes.status})`,
         );
       }
 
@@ -187,7 +187,7 @@ export default function StoryGeneratorPage() {
     } catch (error: unknown) {
       console.error("物語生成エラー:", error);
       const message = error instanceof Error ? error.message : "";
-      setErrorMessage(message || "物語の生成中にエラーが発生しました");
+      setErrorMessage(message || "An error occurred while generating the story.");
     } finally {
       setIsLoading(false);
     }
@@ -221,7 +221,7 @@ export default function StoryGeneratorPage() {
       if (!saveRes.ok) {
         throw new Error(
           saveJson.error ||
-            `物語の登録に失敗しました (Status: ${saveRes.status})`,
+            `Failed to save story (Status: ${saveRes.status})`,
         );
       }
 
@@ -229,7 +229,7 @@ export default function StoryGeneratorPage() {
     } catch (error: unknown) {
       console.error("物語登録エラー:", error);
       const message = error instanceof Error ? error.message : "";
-      setErrorMessage(message || "物語の登録中にエラーが発生しました");
+      setErrorMessage(message || "An error occurred while saving the story.");
     } finally {
       setIsSaving(false);
     }
@@ -282,7 +282,7 @@ export default function StoryGeneratorPage() {
         {/* エラー表示と再試行ボタン */}
         {!isLoading && errorMessage && (
           <div className="bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-2xl mb-4 text-xs">
-            <p className="font-bold mb-1">生成エラー</p>
+            <p className="font-bold mb-1">Generation Error</p>
             <p className="mb-3">{errorMessage}</p>
             <button
               type="button"

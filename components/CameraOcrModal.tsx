@@ -41,7 +41,7 @@ export default function CameraOcrModal({
     } catch (err) {
       console.warn('カメラの起動に失敗しました:', err);
       setCameraError(
-        'カメラにアクセスできませんでした。下の「写真を選択・アップロード」をお試しください。'
+        'Could not access camera. Please try selecting or uploading a photo below.'
       );
     }
   };
@@ -154,7 +154,7 @@ export default function CameraOcrModal({
     } catch (err: unknown) {
       console.error('クライアントサイドOCRエラー:', err);
       const message = err instanceof Error ? err.message : '';
-      setOcrError(message || '画像からの文字読み取りに失敗しました。');
+      setOcrError(message || 'Failed to recognize text from image.');
     } finally {
       setIsAnalyzing(false);
     }
@@ -199,7 +199,7 @@ export default function CameraOcrModal({
       <div className="bg-white w-full max-w-[393px] max-h-[90vh] rounded-2xl p-5 shadow-xl flex flex-col overflow-y-auto border border-stone-200">
         <div className="flex justify-between items-center mb-4 pb-2 border-b border-stone-100">
           <h2 className="text-base font-bold text-stone-800 flex items-center gap-2">
-            <span>📷</span> 写真から単語を読み込む
+            <span>📷</span> Scan Words from Photo
           </h2>
           <button
             type="button"
@@ -228,7 +228,7 @@ export default function CameraOcrModal({
                 />
                 <div className="absolute inset-0 border-2 border-dashed border-sky-400/60 rounded-xl pointer-events-none flex items-center justify-center">
                   <span className="bg-stone-900/70 text-white text-[10px] px-2 py-1 rounded-md backdrop-blur-xs">
-                    単語を枠内に収めて撮影
+                    Fit words inside the frame
                   </span>
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function CameraOcrModal({
                 onClick={handleCapture}
                 className="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl text-sm mb-3 flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
               >
-                <span>📷</span> 写真を撮影する
+                <span>📷</span> Take Photo
               </button>
             )}
 
@@ -259,7 +259,7 @@ export default function CameraOcrModal({
               onClick={() => fileInputRef.current?.click()}
               className="w-full py-2.5 border border-stone-300 hover:bg-stone-50 text-stone-700 font-bold rounded-xl text-xs transition-colors cursor-pointer"
             >
-              ライブラリ・ファイルから写真を選択
+              Choose from Library / File
             </button>
           </div>
         ) : (
@@ -269,7 +269,7 @@ export default function CameraOcrModal({
             <div className="w-full bg-stone-900 rounded-xl overflow-hidden mb-2 border border-stone-200 flex items-center justify-center min-h-[160px] max-h-[220px]">
               <img
                 src={capturedImage}
-                alt="撮影プレビュー"
+                alt="Captured preview"
                 className="w-full h-full max-h-[220px] object-contain"
               />
             </div>
@@ -281,7 +281,7 @@ export default function CameraOcrModal({
               className="w-full py-2.5 mb-3 bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-700 text-xs font-bold rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-1.5"
             >
               <span>🔄</span>
-              <span>再撮影する</span>
+              <span>Retake</span>
             </button>
 
             {/* 解析中ローディング（進捗％表示付き） */}
@@ -289,7 +289,7 @@ export default function CameraOcrModal({
               <div className="py-8 flex flex-col items-center justify-center text-stone-600 gap-2">
                 <div className="w-7 h-7 border-3 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
                 <p className="text-xs font-bold text-sky-700">
-                  ブラウザで単語を読み取り中... ({ocrProgress}%)
+                  Scanning words in browser... ({ocrProgress}%)
                 </p>
               </div>
             )}
@@ -306,16 +306,16 @@ export default function CameraOcrModal({
               <div className="flex flex-col mb-4">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-bold text-stone-700">
-                    検出された単語（選択して入力欄に反映）
+                    Detected Words (Tap to select)
                   </span>
                   <span className="text-xs font-bold text-sky-600">
-                    選択中: {selectedWords.length} / 5
+                    Selected: {selectedWords.length} / 5
                   </span>
                 </div>
 
                 {detectedWords.length === 0 ? (
                   <div className="p-4 bg-stone-50 rounded-xl text-center text-xs text-stone-500 border border-stone-200">
-                    英単語が検出されませんでした。<br />もう一度ピントを合わせて再撮影してください。
+                    No English words detected.<br />Please refocus and try retaking the photo.
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-2 max-h-44 overflow-y-auto p-1">
@@ -353,7 +353,7 @@ export default function CameraOcrModal({
                 onClick={handleModalClose}
                 className="flex-1 py-2.5 border border-stone-300 text-stone-600 font-bold rounded-xl text-xs hover:bg-stone-50 transition-colors cursor-pointer"
               >
-                キャンセル
+                Cancel
               </button>
               <button
                 type="button"
@@ -364,7 +364,7 @@ export default function CameraOcrModal({
                     : 'bg-stone-200 text-stone-400 cursor-not-allowed'
                   }`}
               >
-                入力欄に反映 ({selectedWords.length}件)
+                Apply Words ({selectedWords.length})
               </button>
             </div>
           </div>

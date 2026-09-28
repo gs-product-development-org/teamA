@@ -45,7 +45,7 @@ export default function Tabs() {
         const response = await fetch("/api/words?userId=1");
 
         if (!response.ok) {
-          throw new Error("データの取得に失敗しました");
+          throw new Error("Failed to fetch data");
         }
 
         const data: WordsListResponse = await response.json();
@@ -73,7 +73,7 @@ export default function Tabs() {
         //物語データの取得
         setStories(data.stories);
       } catch (error) {
-        alert("予期しないエラーが発生しました");
+        alert("An unexpected error occurred");
       } finally {
         // ローディング終了
         setIsLoading(false);
@@ -171,7 +171,7 @@ export default function Tabs() {
               {isLoading ? (
                 <Loading />
               ) : filteredWords.length === 0 ? (
-                <div className={styles.emptyWordMessage}>単語が見つかりませんでした</div>
+                <div className={styles.emptyWordMessage}>No words found</div>
               ) : (
                 filteredWords.map((word) => (
                   <div key={word.word_id} className={styles.wordCard}>

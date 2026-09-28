@@ -99,7 +99,7 @@ export default function WordRegisterPage() {
   const handleAddRow = (): void => {
     if (isLoading) return;
     if (words.length >= MAX_WORDS) {
-      setErrorMessage(`単語は最大${MAX_WORDS}個までしか追加できません。`);
+      setErrorMessage(`You can only add up to ${MAX_WORDS} words.`);
       return;
     }
     if (errorMessage) setErrorMessage('');//一旦エラーを消して。
@@ -129,21 +129,21 @@ export default function WordRegisterPage() {
   const validateEnglishInputs = (): boolean => {
     // 5個上限チェック：最大5個を超えている場合は弾きます
     if (words.length > MAX_WORDS) {
-      setErrorMessage(`単語は最大${MAX_WORDS}個までしか登録できません。`);
+      setErrorMessage(`You can only register up to ${MAX_WORDS} words.`);
       return false;
     }
 
     // 空文字チェック：1行でも空の行があれば弾きます
     const hasEmpty = words.some((w) => w.english.trim() === '');
     if (hasEmpty) {
-      setErrorMessage('すべての行に英単語を入力してください。');
+      setErrorMessage('Please enter an English word in every row.');
       return false;
     }
 
     // 45文字制限チェック：45時の理由は最長の英単語。Pneumonoultramicroscopicsilicovolcanoconiosis
     const isOverLength = words.some((w) => w.english.trim().length > MAX_WORD_LENGTH);
     if (isOverLength) {
-      setErrorMessage(`英単語は${MAX_WORD_LENGTH}文字以内で入力してください。`);
+      setErrorMessage(`English words must be ${MAX_WORD_LENGTH} characters or less.`);
       return false;
     }
 
@@ -152,7 +152,7 @@ export default function WordRegisterPage() {
     const englishPattern = /^[a-zA-Z\s\-']+$/;
     const hasInvalidChar = words.some((w) => !englishPattern.test(w.english.trim()));
     if (hasInvalidChar) {
-      setErrorMessage('英語欄には半角英字のみを入力してください（日本語は含められません）。');
+      setErrorMessage('Please enter only English letters in the English field.');
       return false;
     }
 
@@ -191,8 +191,8 @@ export default function WordRegisterPage() {
       if (!response.ok) {
         throw new Error(
           response.status === 429
-            ? 'AIの利用制限に達しました。しばらく時間を置いてから再度お試しください'
-            : data.error || '翻訳候補の取得に失敗しました',
+            ? 'AI rate limit reached. Please wait a moment and try again.'
+            : data.error || 'Failed to fetch translation candidates.',
         );
       }
 
@@ -235,13 +235,13 @@ export default function WordRegisterPage() {
       );
 
       if (hasNotFound) {
-        setErrorMessage('単語が見つかりませんでした。一般的でないか、スペルミスの可能性があります。');
+        setErrorMessage('Word not found. It may be uncommon or misspelled.');
       }
     } catch (error: unknown) {
       console.error(error);
       // 失敗時はユーザーに通知し、そのまま再試行できるようにします。
       const message = error instanceof Error ? error.message : '';
-      setErrorMessage(message || '翻訳の取得に失敗しました。もう一度「翻訳を取得」を押して再試行してください。');
+      setErrorMessage(message || 'Failed to fetch translations. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -250,14 +250,14 @@ export default function WordRegisterPage() {
   // 「この単語で登録する」ボタンの処理です。本番API（POST /api/words）にデータを送信します。
   const handleRegisterSubmit = async (): Promise<void> => {
     if (!genre) {
-      setErrorMessage('物語のジャンルを選択してください。');
+      setErrorMessage('Please select a story genre.');
       return;
     }
 
     // 日本語訳が未選択の行がないかチェック（プルダウンを選んでいない行を防止）
     const isMissingJapanese = words.some((w) => w.japanese.trim() === '');
     if (isMissingJapanese) {
-      setErrorMessage('すべての単語の日本語訳を選択してください。');
+      setErrorMessage('Please select Japanese translations for all words.');
       return;
     }
 
@@ -268,7 +268,7 @@ export default function WordRegisterPage() {
 
     // 有効な単語が1つも残らなかった場合は登録できないようにブロックします。
     if (validWords.length === 0) {
-      setErrorMessage('登録できる単語がありません（すべての単語が辞書未登録です）。');
+      setErrorMessage('No words available to register (all words are unregistered).');
       return;
     }
 
@@ -302,13 +302,13 @@ export default function WordRegisterPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || '単語の登録に失敗しました');
+        throw new Error(data.error || 'Failed to register words.');
       }
 
       // 今回の登録結果だけを保存し、物語生成では過去の登録単語を使わないようにします。
       const savedWords = Array.isArray(data.data) ? data.data : [];
       if (savedWords.length === 0) {
-        throw new Error('登録された単語データを取得できませんでした');
+        throw new Error('Failed to retrieve registered word data.');
       }
       sessionStorage.setItem('latestRegisteredWords', JSON.stringify(savedWords));
       sessionStorage.setItem('latestStoryGenre', genre);
@@ -321,7 +321,7 @@ export default function WordRegisterPage() {
     } catch (error: unknown) {
       console.error(error);
       const message = error instanceof Error ? error.message : '';
-      setErrorMessage(message || '登録処理中にエラーが発生しました。もう一度お試しください。');
+      setErrorMessage(message || 'An error occurred during registration. Please try again.');
     } finally {
       setIsLoading(false);
     }
