@@ -7,6 +7,7 @@ import StoryEnglishView, {
 } from "@/components/StoryEnglishView";
 
 import styles from "./page.module.css";
+import Link from "next/link";
 
 // ※他者が作成した和訳コンポーネント用スロット
 // import JapaneseStoryView from '@/components/JapaneseStoryView';
@@ -64,6 +65,7 @@ function getRegisteredWords(value: unknown): RegisteredWord[] {
 }
 
 export default function StoryGeneratorPage() {
+  const [isBackModalOpen, setIsBackModalOpen] = useState<boolean>(false);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -246,136 +248,167 @@ export default function StoryGeneratorPage() {
     return () => window.clearTimeout(timerId);
   }, [generateStory]);
 
+
   return (
-    // <main className={styles.main}>
-      <div className="container">
+    <div className="container">
 
-        <div className={styles.navigation}>
+      <div className={styles.navigation}>
+        {/* <Link
+          href="/register"
+          className={`${styles.returnButtonLink} ${
+            isLoading ? styles.disabledReturnButton : ""
+          }`}
+          aria-disabled={isLoading}
+        >
+          <img
+            src="/return.png"
+            alt="Back button"
+            className={styles.returnImage}
+          />
+        </Link> */}
+     <Link
+        href="/register"
+        className={`${styles.returnButtonLink} ${
+          isLoading ? styles.disabledReturnButton : ""
+        }`}
+        aria-disabled={isLoading}
+        onClick={(e) => {
+          if (isLoading) {
+            e.preventDefault();
+            return;
+          }
+
+          e.preventDefault();
+          setIsBackModalOpen(true);
+        }}
+      >
+        <img
+          src="/return.png"
+          alt="Back button"
+          className={styles.returnImage}
+        />
+      </Link>
+
+        <button
+          type="button"
+          onClick={saveStoryAndNavigate}
+          disabled={isSaving || isLoading || !storyData}
+          className={styles.saveButton}
+        >
+          {isSaving ? "Saving..." : "Save Story"}
+        </button>
+      </div>
+
+      {isLoading && (
+        <div className={styles.loading}>
+          <div className={styles.spinner}></div>
+
+          <p className={styles.loadingTitle}>
+            Generating story...
+          </p>
+
+          <p className={styles.loadingText}>
+            AI is writing a story using the words you just registered.
+          </p>
+        </div>
+      )}
+
+      {!isLoading && errorMessage && (
+        <div className={styles.error}>
+          <p className={styles.errorTitle}>
+            Generation Error
+          </p>
+
+          <p className={styles.errorMessage}>
+            {errorMessage}
+          </p>
+
           <button
             type="button"
-            onClick={() => router.push("/register")}
-            className={styles.backButton}
+            onClick={generateStory}
+            className={styles.retryButton}
           >
-            ← 単語登録へ
-          </button>
-
-          <button
-            type="button"
-            onClick={saveStoryAndNavigate}
-            disabled={isSaving || isLoading || !storyData}
-            className={styles.saveButton}
-          >
-            {isSaving ? "保存中..." : "物語を保存"}
+            Try Again
           </button>
         </div>
+      )}
 
-        {isLoading && (
-          <div className={styles.loading}>
-            <div className={styles.spinner}></div>
+      {!isLoading && storyData && (
+        <>
+          <StoryEnglishView
+            title={storyData.title}
+            story={storyData.story}
+            words={storyData.words}
+            imageUrl={storyData.imageUrl}
+            onRegenerateStory={generateStory}
+            onRegenerateImage={() => void generateImage(storyData)}
+            isImageLoading={isImageLoading}
+            isStoryLoading={isLoading}
+          />
 
-            <p className={styles.loadingTitle}>
-              物語を生成中...
+          {imageErrorMessage && (
+            <p className={styles.imageError}>
+              {imageErrorMessage}
             </p>
+          )}
 
-            <p className={styles.loadingText}>
-              さっき登録した単語を使ってAIが執筆しています
-            </p>
-          </div>
-        )}
+          <section className={styles.translationSection}>
+            <button
+              type="button"
+              onClick={() => setIsJapaneseVisible((visible) => !visible)}
+              aria-expanded={isJapaneseVisible}
+              className={styles.translationButton}
+            >
+              <span>View Japanese Translation</span>
 
-        {!isLoading && errorMessage && (
-          <div className={styles.error}>
-            <p className={styles.errorTitle}>生成エラー</p>
+              <span
+                aria-hidden="true"
+                className={styles.translationIcon}
+              >
+                {isJapaneseVisible ? "−" : "+"}
+              </span>
+            </button>
 
-            <p className={styles.errorMessage}>
-              {errorMessage}
-            </p>
+            {isJapaneseVisible && (
+              <p className={styles.translationText}>
+                {storyData.japaneseStory}
+              </p>
+            )}
+          </section>
+        </>
+      )}
+      {isBackModalOpen && (
+      <div className={styles.modalOverlay}>
+        <div className={styles.modal}>
+          <h2 className={styles.modalTitle}>
+            Leave this page?
+          </h2>
+
+          <p className={styles.modalText}>
+            The generated story will not be saved.
+          </p>
+
+          <div className={styles.modalActions}>
+            <button
+              type="button"
+              onClick={() => setIsBackModalOpen(false)}
+              className={styles.modalCancelButton}
+            >
+              Cancel
+            </button>
 
             <button
               type="button"
-              onClick={generateStory}
-              className={styles.retryButton}
+              onClick={() => router.push("/register")}
+              className={styles.modalLeaveButton}
             >
-              もう一度試す
+              Leave
             </button>
           </div>
-        )}
-
-        {!isLoading && storyData && (
-          <>
-            <StoryEnglishView
-              title={storyData.title}
-              story={storyData.story}
-              words={storyData.words}
-              imageUrl={storyData.imageUrl}
-            />
-
-            {imageErrorMessage && (
-              <p className={styles.imageError}>
-                {imageErrorMessage}
-              </p>
-            )}
-
-            <section className={styles.translationSection}>
-              <button
-                type="button"
-                onClick={() => setIsJapaneseVisible((visible) => !visible)}
-                aria-expanded={isJapaneseVisible}
-                className={styles.translationButton}
-              >
-                <span>和訳を見る</span>
-
-                <span
-                  aria-hidden="true"
-                  className={styles.translationIcon}
-                >
-                  {isJapaneseVisible ? "−" : "+"}
-                </span>
-              </button>
-
-              {isJapaneseVisible && (
-                <p className={styles.translationText}>
-                  {storyData.japaneseStory}
-                </p>
-              )}
-            </section>
-
-            <div className={styles.actions}>
-              <button
-                type="button"
-                onClick={() => void generateImage(storyData)}
-                disabled={isLoading || isImageLoading}
-                className={styles.actionButton}
-              >
-                <span>🖼️</span>
-                <span>
-                  {isImageLoading ? "画像生成中..." : "画像を再生成する"}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={generateStory}
-                disabled={isImageLoading || isLoading}
-                className={styles.actionButton}
-              >
-                <span>🔄</span>
-                <span>別の物語を再生成する</span>
-              </button>
-
-              <div className={styles.listButtonWrapper}>
-                <button
-                  type="button"
-                  onClick={() => router.push("/list")}
-                  className={styles.listButton}
-                >
-                  保存せずに一覧画面に戻る
-                </button>
-              </div>
-            </div>
-          </>
-        )}
+        </div>
       </div>
-    // </main>
+    )}
+    </div>
+    
   );
 }

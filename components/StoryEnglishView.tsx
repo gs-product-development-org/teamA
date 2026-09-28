@@ -13,8 +13,14 @@ export interface StoryWordInfo {
 interface StoryEnglishViewProps {
   title: string;
   story: string;
-  words?: StoryWordInfo[];
+  words: StoryWordInfo[];
   imageUrl?: string;
+
+  onRegenerateStory?: () => void;
+  onRegenerateImage?: () => void;
+
+  isImageLoading?: boolean;
+  isStoryLoading?: boolean;
 }
 
 export default function StoryEnglishView({
@@ -22,6 +28,10 @@ export default function StoryEnglishView({
   story,
   words = [],
   imageUrl,
+  onRegenerateStory,
+  onRegenerateImage,
+  isImageLoading,
+  isStoryLoading,
 }: StoryEnglishViewProps) {
 
   // 返り値: 本文中の学習対象語をハイライトしたReactノードの配列
@@ -85,29 +95,63 @@ export default function StoryEnglishView({
 
   return (
     <div className="storyContainer">
-       <div className="storyContents">
-        {imageUrl && (
-          <div className="imageContainer">
-            <img
-              src={imageUrl}
-              alt={title || "物語の画像"}
-              className="storyImage"
-            />
-          </div>
-        )}
 
         {/* 物語タイトル */}
-        <h2 className="title">
-          <span className="titleIcon">📖</span>
-          {title || "無題の物語"}
-        </h2>
-
-        {/* ハイライト付き英文本文 */}
-        <div className="storyTextContainer">
-          <p className="storyText">
-            {renderHighlightedStory()}
-          </p>
+        <div className="titleBox">
+          <h2 className="title">
+            {title || "無題の物語"}
+          </h2>
         </div>
+
+       <div className="storyContents">
+
+  {imageUrl && (
+    <div className="imageContainer">
+
+      <button
+        type="button"
+        onClick={onRegenerateImage}
+        disabled={isImageLoading || isStoryLoading}
+        className="regenerateImageButton"
+      >
+        <img
+        src="/returnPurple.png"
+        alt=""
+        className="retryIcon"
+      />
+        {isImageLoading ? "Generating..." : "Regenerate"}
+      </button>
+
+      <img
+        src={imageUrl}
+        alt={title || "物語の画像"}
+        className="storyImage"
+      />
+
+    </div>
+  )}
+
+  <div className="storyTextContainer">
+
+    <button
+      type="button"
+      onClick={onRegenerateStory}
+      disabled={isStoryLoading || isImageLoading}
+      className="regenerateStoryButton"
+    >
+      <img
+        src="/returnPurple.png"
+        alt=""
+        className="retryIcon"
+      />
+      Regenerate
+    </button>
+
+    <p className="storyText">
+      {renderHighlightedStory()}
+    </p>
+
+  </div>
 
         {/* 登場単語のタグ一覧 */}
         {words.length > 0 && (
