@@ -1,5 +1,5 @@
 .listHeader {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 0 4px;
 }
 
@@ -121,8 +121,24 @@
 }
 
 .listContainer {
-  padding-bottom: 80px;
+  position: fixed;
+  top: 60px;
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 100%;
+  max-width: 393px;
+
+  padding: 16px;
+  box-sizing: border-box;
+
+  background-color: var(--color-bg-base);
+  color: var(--color-text-main);
+
+  overflow: hidden;
 }
+
 
 /* ========================================
    3. 物語（ピンクのファイルフォルダー本体）
@@ -135,7 +151,7 @@
   margin-left: 4px;
   margin-right: 4px;
   margin-bottom: 60px;
-  max-height: min(540px, 62vh);
+  max-height: 50vh;
   overflow-y: auto;
   border: 3px solid var(--color-primary-pink);
   border-radius: 0 14px 14px 14px;
@@ -250,6 +266,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-height: 50vh;
 }
 
 .wordCard {
