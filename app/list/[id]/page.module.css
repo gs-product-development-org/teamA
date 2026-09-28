@@ -1,56 +1,66 @@
-.keywords{
-    display: flex;
-}
-
-/* ========================================
-   1. コンテナ・全体レイアウト
-   ======================================== */
-:global(.container) {
-  max-width: 393px;
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: 32px 16px;
-  background-color: var(--color-bg-base);
-  color: var(--color-text-main);
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ローディング */
-.loadingContainer{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex: 1;
-}
-
-.loading{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loading p{
-    height: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.card {
-  background-color: #ffffff;
-  border-radius: 1rem;
-  padding: 0.75rem;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  border: 1px solid #e7e5e4;
-  margin-bottom: 0.75rem;
+.detailContainer {
   width: 100%;
 }
 
+.navHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
 
-  .boxCenter {
+.returnButtonLink {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.returnButtonLink:hover {
+  transform: scale(1.08);
+}
+
+.returnImage {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.storyFolderArea {
+  position: relative;
+  background-color: var(--color-primary-pink);
+  border: 3px solid var(--color-primary-pink);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  padding: 10px 8px;
+}
+
+.storyFolderContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.boxCenter {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.japaneseToggle {
+  width: 100%;
+  background-color: #ffffff;
+  color: #be185d;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: 12px;
+  padding: 11px 14px;
+  cursor: pointer;
+  border: 2px solid var(--color-primary-pink);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.japaneseToggle:hover {
+  background-color: #fdf2f8;
+  transform: translateY(-1px);
 }

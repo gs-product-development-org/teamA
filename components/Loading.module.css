@@ -1,0 +1,22 @@
+/* ローディング */
+.loading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 単語タブのテーブル高さと統一 thead 50px + tbody 630px*/
+  height: 680px;
+  font-size: large;
+  background-color: var(--color-bg-base);
+}
+
+.loading p{
+  color: var(--color-text-main);
+  display: block;
+  background-color: var(--color-primary-green);
+  width: 60%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}

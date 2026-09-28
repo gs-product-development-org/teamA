@@ -1,0 +1,92 @@
+.storyView {
+  width: 100%;
+}
+
+.storyTitleCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.storyIcon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.storyCard {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.storyImage {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+}
+
+.storyTextBox {
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.storyText {
+  margin: 0;
+  font-size: 0.925rem;
+  line-height: 1.7;
+  color: #334155;
+  white-space: pre-wrap;
+}
+
+/* ハイライト */
+.highlight {
+  background-color: #fef08a;
+  color: #854d0e;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-bottom: 2px solid #eab308;
+  border-radius: 6px;
+  margin: 0 1px;
+}
+
+/* 対象単語一覧 */
+.wordList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #fce7f3;
+}
+
+.wordTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.775rem;
+  font-weight: 600;
+  background-color: #fdf2f8;
+  color: #be185d;
+  border: 1px solid #fbcfe8;
+}
+
+.wordSurface {
+  margin-left: 4px;
+  color: #db2777;
+}

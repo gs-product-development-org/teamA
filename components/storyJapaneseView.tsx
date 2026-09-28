@@ -1,29 +1,36 @@
 "use client";
 
-type Words={
-    meaningId: number; 
-    english: string; 
-    japanese: string; 
-    surfaces: string[];
-}
+import type { StoryDetailWord } from "@/app/api/stories/[id]/route";
+import "./storyJapaneseView.css";
 
-type Props = { 
-    japaneseStory: string;
-    words:Words[]; 
+type Props = {
+  japaneseStory: string;
+  words: StoryDetailWord[];
 };
 
-export default function StoryJapaneseViews({japaneseStory,words}:Props) {
-  
-    
+export default function StoryJapaneseViews({
+  japaneseStory,
+  words,
+}: Props) {
   return (
-    <div  className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 mb-3">
-        <p className="bg-stone-50 rounded-xl p-5 border border-stone-100">{japaneseStory}</p>
-        <div className="bg-stone-50 rounded-xl p-5 mt-3 border border-stone-100">{words.map((word) => (
-            <p key={word.meaningId}>
-                {word.english} / {word.japanese}
-            </p>
+    <div className="japaneseView">
+      <div className="japaneseStoryBox">
+  <p className="japaneseStory">{japaneseStory}</p>
+      </div>
+
+      {words && words.length > 0 && (
+        <div className="japaneseWordSection">
+          <div className="wordGrid">
+            {words.map((word) => (
+              <div key={word.meaningId} className="japaneseWordItem">
+                <span className="wordEnglish">{word.english}</span>
+                <span className="wordDivider">:</span>
+                <span className="wordJapanese">{word.japanese}</span>
+              </div>
             ))}
+          </div>
         </div>
+      )}
     </div>
   );
 }

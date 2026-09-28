@@ -4,6 +4,8 @@ import {
   assertTextsAreSafe,
   ModerationFlaggedError,
 } from "@/lib/ai/moderation";
+import { validateGenre } from "@/lib/validations/story";
+import { MAX_WORD_LENGTH, MAX_MEANING_LENGTH } from "@/lib/validations/word";
 
 /**
  * フロントエンドから送信される単語情報の型定義
@@ -166,7 +168,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. 各単語のバリデーションチェック（meaningId, word, meaning の存在確認）
+    // 2. 各単語のバリデーションチェック（meaningId, word, meaning の存在確認と文字数上限）
     const validWords: StoryWordInput[] = [];
     for (const item of body.words) {
       if (
@@ -184,14 +186,44 @@ export async function POST(request: Request) {
           { status: 400 },
         );
       }
+
+      const trimmedWord = item.word.trim();
+      const trimmedMeaning = item.meaning.trim();
+
+      if (trimmedWord.length > MAX_WORD_LENGTH) {
+        return NextResponse.json(
+          {
+            error: `英単語は${MAX_WORD_LENGTH}文字以内で入力してください（現在: ${trimmedWord.length}文字）`,
+          },
+          { status: 400 },
+        );
+      }
+
+      if (trimmedMeaning.length > MAX_MEANING_LENGTH) {
+        return NextResponse.json(
+          {
+            error: `意味は${MAX_MEANING_LENGTH}文字以内で入力してください（現在: ${trimmedMeaning.length}文字）`,
+          },
+          { status: 400 },
+        );
+      }
+
       validWords.push({
         meaningId: item.meaningId,
-        word: item.word.trim(),
-        meaning: item.meaning.trim(),
+        word: trimmedWord,
+        meaning: trimmedMeaning,
       });
     }
 
-    // 3. ジャンル指定の取得（任意）
+    // 3. ジャンル指定のバリデーション（完全性・プロンプトインジェクション対策）
+    const genreValidation = validateGenre(body.genre);
+    if (!genreValidation.isValid) {
+      return NextResponse.json(
+        { error: genreValidation.error || "指定されたジャンルが無効です" },
+        { status: 400 },
+      );
+    }
+
     const genre =
       typeof body.genre === "string" && body.genre.trim().length > 0
         ? body.genre.trim()

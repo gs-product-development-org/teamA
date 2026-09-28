@@ -1,0 +1,43 @@
+ .headerBlock {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 999;
+  background-color: var(--color-primary-yellow);
+}
+
+.headerContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 393px;
+  height: 60px;
+  margin: 0 auto;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.header {
+  background-color: var(--color-primary-yellow);
+  color: var(--color-text-main);
+  width: 85%;
+  height: 60px;
+  font-size: 30px;
+  display: flex;
+  text-align: left;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 8px;
+}
+
+.icon {
+  background-color: var(--color-primary-yellow);
+  width: 15%;
+  height: 60px;
+  object-fit: contain;
+  padding: 6px;
+}

@@ -19,8 +19,70 @@
   }
 }
 
+:root {
+  /* 1. ベースカラー */
+  --color-base: black;
+  --color-bg-glay: rgb(159, 159, 159);
+
+  /* 2. メインカラー */
+  --color-primary-pink: #FE07DA;
+  --color-primary-green: #00F800;
+  --color-primary-blue: #00CCEC;
+  --color-primary-purple: #8C3EFE;
+  --color-primary-yellow: #FCFE00;
+  --color-primary-orange: #FD6500;
+
+  /* 3. 非アクティブカラー */
+  --color-inactive-yellow: #ffffbd;
+
+  /* 4. 基本テキスト・枠線 */
+  --color-text-main:black;
+}
+
+/* ========================================
+  　フォント
+   ======================================== */
+.font {
+  font-family: "Bagel Fat One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+/* ========================================
+  　コンテナ
+   ======================================== */
+.container {
+  max-width: 393px;
+  min-height: 100vh;
+  margin: 60px auto 0 auto;
+  padding: 16px;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-main);
+  box-sizing: border-box;
+}
+
+
+/* ========================================
+  　共通部分
+   ======================================== */
+/* 丸角 */
+   .radius{
+    border-radius: 16px;
+   }
+
 body {
-  background: var(--background);
-  color: var(--foreground);
+  color: var(--color-text-main);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.main {
+  flex: 1;
+}
+
+.footer{
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-base);
 }

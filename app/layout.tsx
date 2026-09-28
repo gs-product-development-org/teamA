@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import TopBar from "@/components/TopBar";
 import BottomNav from "@/components/BottomNav";
+import SakanaBackground from "@/components/SakanaBackground";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,18 +18,40 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "ものがたん",
   description: "物語で英単語を覚えよう",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png" },
+    ],
+    apple: "/favicon.png",
+  },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <main className="flex-1">{children}</main>
+       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Sekuya&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="footer relative">
+        <SakanaBackground />
+        <TopBar />
+        <main className="main relative z-10">{children}</main>
         <BottomNav />
       </body>
     </html>
   );
 }
+
