@@ -15,6 +15,9 @@
   max-width: 393px;
   height: 60px;
   margin: 0 auto;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 .header {
@@ -24,9 +27,11 @@
   height: 60px;
   font-size: 30px;
   display: flex;
+  text-align: left;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding-left: 8px;
 }
 
 .icon {
