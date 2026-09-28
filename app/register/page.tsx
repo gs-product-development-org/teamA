@@ -47,16 +47,29 @@ export default function WordRegisterPage() {
       setErrorMessage("");
     }
 
-    const newWords: WordItem[] = selectedWords
-      .slice(0, MAX_WORDS)
-      .map((wordStr, index) => ({
+    const existingWords = words.filter(
+      (w) => w.english.trim() !== "" || w.japanese.trim() !== ""
+    );
+
+    // カメラで選択された単語を WordItem に変換（上限で切り捨てず保持）
+    const cameraWordItems: WordItem[] = selectedWords.map(
+      (wordStr, index) => ({
         id: `${Date.now()}_${index}`,
         english: wordStr,
         japanese: "",
         japaneseOptions: [],
-      }));
+      })
+    );
 
-    setWords(newWords);
+    const mergedWords = [...existingWords, ...cameraWordItems];
+    setWords(mergedWords);
+
+    // 5件を超えている場合は注意メッセージを表示
+    if (mergedWords.length > MAX_WORDS) {
+      setErrorMessage(
+        `You can register up to ${MAX_WORDS} words. Please remove extra words (${mergedWords.length}/${MAX_WORDS}).`
+      );
+    }
   };
 
   const handleEnglishChange = (
