@@ -294,10 +294,20 @@ export default function QuizPage() {
     ]);
     setErrorMessage("");
     setIsAnswered(true);
+    
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }
 
   function handleNextStory(): void {
     if (!quizData || !isAnswered) return;
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
 
     if (currentStoryIndex >= quizData.stories.length - 1) {
       setIsFinished(true);
