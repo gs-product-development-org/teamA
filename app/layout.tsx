@@ -20,8 +20,11 @@ export const metadata: Metadata = {
   title: "ものがたん",
   description: "物語で英単語を覚えよう",
   icons: {
-    icon: "/seicyu_color3.PNG",
-    apple: "/seicyu_color3.PNG",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png" },
+    ],
+    apple: "/favicon.png",
   },
 };
 

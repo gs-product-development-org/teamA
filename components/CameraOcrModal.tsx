@@ -49,7 +49,7 @@ export default function CameraOcrModal({
       console.warn("カメラの起動に失敗しました:", err);
 
       setCameraError(
-        "カメラにアクセスできませんでした。下の「写真を選択・アップロード」をお試しください。"
+        'Could not access camera. Please try selecting or uploading a photo below.'
       );
     }
   };
@@ -182,18 +182,9 @@ export default function CameraOcrModal({
 
       setSelectedWords(cleanedWords.slice(0, 5));
     } catch (err: unknown) {
-      console.error(
-        "クライアントサイドOCRエラー:",
-        err
-      );
-
-      const message =
-        err instanceof Error ? err.message : "";
-
-      setOcrError(
-        message ||
-          "画像からの文字読み取りに失敗しました。"
-      );
+      console.error('クライアントサイドOCRエラー:', err);
+      const message = err instanceof Error ? err.message : '';
+      setOcrError(message || 'Failed to recognize text from image.');
     } finally {
       setIsAnalyzing(false);
     }
@@ -309,7 +300,7 @@ export default function CameraOcrModal({
               }
               className="fileSelectButton"
             >
-              Choose Photo from Library or Files
+              Choose from Library / File
             </button>
           </div>
         ) : (

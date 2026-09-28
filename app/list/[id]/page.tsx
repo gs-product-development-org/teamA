@@ -22,12 +22,12 @@ export default function StoryDetailPages() {
       try {
         const response = await fetch(`/api/stories/${id}`);
         if (!response.ok) {
-          throw new Error("データの取得に失敗しました");
+          throw new Error("Failed to fetch data");
         }
         const data: StoryDetailResponse = await response.json();
         setStory(data);
       } catch (error) {
-        alert("データの取得に失敗しました");
+        alert("Failed to fetch data");
       } finally {
         setIsLoading(false);
       }
