@@ -500,7 +500,12 @@ export default function WordRegisterPage() {
 
         {errorMessage && (
           <div className={styles.errorMessage}>
-            {errorMessage}
+            <img
+              src="/seicyu_sad.PNG"
+              alt="エラー"
+              className={styles.errorIcon}
+            />
+            <span>{errorMessage}</span>
           </div>
         )}
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../globals.css";
 import styles from "./page.module.css";
 
@@ -58,6 +58,13 @@ const USER_ID = 1;
 const QUIZ_LIMIT = 3;
 const MAX_ANSWER_LENGTH = 45;
 const ENGLISH_ANSWER_PATTERN = /^[a-zA-Z\s\-\u2010-\u2015\u2212'’‘`′]+$/;
+
+const RANDOM_START_IMAGES = [
+  "/seicyu_smile2.PNG",
+  "/seicyu_think.PNG",
+  "/youcyu01_color.PNG",
+  "/youcyu02_color.PNG",
+];
 
 /**
  * 正規表現の特殊文字をエスケープする関数
@@ -198,6 +205,16 @@ export default function QuizPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showHint, setShowHint] = useState(false);
+  const [randomImage, setRandomImage] = useState<string>("");
+
+  function pickRandomImage(): void {
+    const randomIndex = Math.floor(Math.random() * RANDOM_START_IMAGES.length);
+    setRandomImage(RANDOM_START_IMAGES[randomIndex]);
+  }
+
+  useEffect(() => {
+    pickRandomImage();
+  }, []);
 
   const currentStory = quizData?.stories[currentStoryIndex];
   const currentParts = currentStory ? buildStoryParts(currentStory) : [];
@@ -373,6 +390,15 @@ export default function QuizPage() {
               <p className="mt-3 text-sm leading-6 text-slate-600 font-medium">
                 Fill in the blanks in the story to test your vocabulary.
               </p>
+              {randomImage && (
+                <div className="mt-5 flex justify-center">
+                  <img
+                    src={randomImage}
+                    alt="Quiz Character"
+                    className="h-28 w-28 object-contain"
+                  />
+                </div>
+              )}
               <button
                 type="button"
                 onClick={handleStartQuiz}
@@ -382,7 +408,12 @@ export default function QuizPage() {
               </button>
               {errorMessage && (
                 <div className={styles.errorBox}>
-                  {errorMessage}
+                  <img
+                    src="/seicyu_sad.PNG"
+                    alt="エラー"
+                    className={styles.errorIcon}
+                  />
+                  <span>{errorMessage}</span>
                 </div>
               )}
             </div>
@@ -478,7 +509,12 @@ export default function QuizPage() {
               </button>
               {errorMessage && (
                 <div className={styles.errorBox}>
-                  {errorMessage}
+                  <img
+                    src="/seicyu_sad.PNG"
+                    alt="エラー"
+                    className={styles.errorIcon}
+                  />
+                  <span>{errorMessage}</span>
                 </div>
               )}
             </div>
@@ -506,6 +542,7 @@ export default function QuizPage() {
                   setAnswers({});
                   setIsAnswered(false);
                   setShowHint(false);
+                  pickRandomImage();
                 }}
                 className={`${styles.secondaryButton} mt-6`}
               >

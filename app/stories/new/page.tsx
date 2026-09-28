@@ -282,7 +282,14 @@ export default function StoryGeneratorPage() {
         {/* エラー表示と再試行ボタン */}
         {!isLoading && errorMessage && (
           <div className="bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-2xl mb-4 text-xs">
-            <p className="font-bold mb-1">Generation Error</p>
+            <div className="flex items-center gap-2 mb-2">
+              <img
+                src="/seicyu_sad.PNG"
+                alt="エラー"
+                className="w-8 h-8 object-contain flex-shrink-0"
+              />
+              <p className="font-bold text-sm">Generation Error</p>
+            </div>
             <p className="mb-3">{errorMessage}</p>
             <button
               type="button"
@@ -306,7 +313,14 @@ export default function StoryGeneratorPage() {
             />
 
             {imageErrorMessage && (
-              <p className="mb-4 text-xs text-rose-600">{imageErrorMessage}</p>
+              <div className="mb-4 flex items-center gap-2 text-xs text-rose-600">
+                <img
+                  src="/seicyu_sad.PNG"
+                  alt="エラー"
+                  className="w-5 h-5 object-contain flex-shrink-0"
+                />
+                <p>{imageErrorMessage}</p>
+              </div>
             )}
 
             <section className="mb-4 bg-white rounded-2xl border border-stone-200 shadow-sm">
