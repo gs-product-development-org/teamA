@@ -291,7 +291,7 @@ export default function StoryGeneratorPage() {
           <div className={styles.loading}>
             <div className={styles.loadingImages}>
                <img
-                src="/youcyu01_color.png"
+                src="/youcyu01_color.PNG"
                 alt=""
                 className={styles.loadingImageRotate}
               />
