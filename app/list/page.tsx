@@ -97,7 +97,7 @@ export default function Tabs() {
   );
   
   return (
-    <div className={`container ${styles.listContainer}`}>
+    <div className={styles.listContainer}>
       <header className={styles.listHeader}>
         <p className={styles.headerSub}>
           English Story List
