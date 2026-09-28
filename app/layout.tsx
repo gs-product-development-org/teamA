@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import TopBar from "@/components/TopBar";
 import BottomNav from "@/components/BottomNav";
-
-
+import SakanaBackground from "@/components/SakanaBackground";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +27,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="ja"
@@ -46,11 +45,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           rel="stylesheet"
         />
       </head>
-      <body className="footer">
+      <body className="footer relative">
+        <SakanaBackground />
         <TopBar />
-        <main className="main">{children}</main>
+        <main className="main relative z-10">{children}</main>
         <BottomNav />
       </body>
     </html>
   );
 }
+

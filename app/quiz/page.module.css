@@ -1,6 +1,7 @@
 .page {
-  background-color: var(--color-base, #000000);
+  background-color: transparent;
   min-height: 100vh;
+  padding-bottom: 80px;
   color: #ffffff;
 }
 

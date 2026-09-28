@@ -407,7 +407,7 @@ export default function WordRegisterPage() {
 
   return (
     <main>
-      <div className="container">
+      <div className={`container ${styles.registerContainer}`}>
         <div className={styles.registerHeader}>
           <div>
             <p className={styles.headerSub}>
