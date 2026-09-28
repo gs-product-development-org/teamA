@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   /* 単語タブのテーブル高さと統一 thead 50px + tbody 630px*/
-  height: 680px;
+  height: 50vh;
   font-size: large;
   background-color: var(--color-bg-base);
 }
