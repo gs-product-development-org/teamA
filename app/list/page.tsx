@@ -97,7 +97,7 @@ export default function Tabs() {
   );
   
   return (
-    <div className="container">
+    <div className={`container ${styles.listContainer}`}>
       {/* <Link href="/register">
         <p>物語登録画面へ</p>
       </Link> */}
