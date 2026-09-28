@@ -120,6 +120,10 @@
   transform: translateY(4px);
 }
 
+.listContainer {
+  padding-bottom: 80px;
+}
+
 /* ========================================
    3. 物語（ピンクのファイルフォルダー本体）
    ======================================== */
@@ -130,7 +134,8 @@
   background-color: var(--color-primary-pink);
   margin-left: 4px;
   margin-right: 4px;
-  max-height: 680px;
+  margin-bottom: 60px;
+  max-height: min(540px, 62vh);
   overflow-y: auto;
   border: 3px solid var(--color-primary-pink);
   border-radius: 0 14px 14px 14px;
@@ -232,7 +237,8 @@
   background-color: var(--color-primary-blue);
   margin-left: 4px;
   margin-right: 4px;
-  max-height: 680px;
+  margin-bottom: 60px;
+  max-height: min(540px, 62vh);
   overflow-y: auto;
   border: 3px solid var(--color-primary-blue);
   border-radius: 14px 0 14px 14px;
