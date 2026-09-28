@@ -201,6 +201,40 @@ export default function StoryGeneratorPage() {
     setErrorMessage("");
 
     try {
+      // sessionStorage から登録済み単語データを取得（meaning_id の二重保護）
+      let registeredWords: RegisteredWord[] = [];
+      try {
+        const stored = sessionStorage.getItem("latestRegisteredWords");
+        if (stored) {
+          registeredWords = getRegisteredWords(JSON.parse(stored));
+        }
+      } catch {
+        // 読み込み失敗時はフォールバック
+      }
+
+      const wordsPayload = (storyData.words || []).map((word) => {
+        let mId = Number(word.meaningId);
+        // meaningId が不自然な場合、登録済み単語リストからスペル一致で復元
+        if (!Number.isFinite(mId) || mId <= 0) {
+          const matched = registeredWords.find(
+            (rw) =>
+              (rw.english && rw.english.toLowerCase() === word.word?.toLowerCase()) ||
+              (rw.word && rw.word.toLowerCase() === word.word?.toLowerCase()),
+          );
+          if (matched) {
+            const resolvedId = Number(matched.meaning_id || matched.meaningId);
+            if (Number.isFinite(resolvedId) && resolvedId > 0) {
+              mId = resolvedId;
+            }
+          }
+        }
+
+        return {
+          meaningId: mId,
+          surfaces: word.surfaces || [],
+        };
+      });
+
       const saveRes = await fetch("/api/stories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -210,10 +244,7 @@ export default function StoryGeneratorPage() {
           story: storyData.story,
           japaneseStory: storyData.japaneseStory,
           imageUrl: storyData.imageUrl,
-          words: storyData.words.map((word) => ({
-            meaningId: word.meaningId,
-            surfaces: word.surfaces || [],
-          })),
+          words: wordsPayload,
         }),
       });
 

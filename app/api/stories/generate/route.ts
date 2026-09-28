@@ -69,10 +69,6 @@ const storySchema = {
       items: {
         type: "object",
         properties: {
-          meaningId: {
-            type: "integer",
-            description: "入力された単語の meaningId",
-          },
           word: {
             type: "string",
             description: "元の英単語",
@@ -84,7 +80,7 @@ const storySchema = {
               "物語の中で実際に使用された形（例: run なら ran や running など、使用されたすべての形）",
           },
         },
-        required: ["meaningId", "word", "surfaces"],
+        required: ["word", "surfaces"],
         additionalProperties: false,
       },
     },
@@ -92,6 +88,16 @@ const storySchema = {
   required: ["title", "story", "japaneseStory", "words"],
   additionalProperties: false,
 };
+
+interface AiStoryResponse {
+  title: string;
+  story: string;
+  japaneseStory: string;
+  words: {
+    word: string;
+    surfaces: string[];
+  }[];
+}
 
 /**
  * Groq API を呼び出してショートストーリーを生成する処理
@@ -101,10 +107,11 @@ async function generateStory(
   words: StoryWordInput[],
   genre?: string,
 ): Promise<GenerateStoryResponse> {
+  // AIには純粋に単語スペルと意味だけを渡し、内部ID（meaningId）は渡さない
   const wordListText = words
     .map(
       (item, index) =>
-        `${index + 1}. [ID: ${item.meaningId}] ${item.word}（意味: ${item.meaning}）`,
+        `${index + 1}. ${item.word}（意味: ${item.meaning}）`,
     )
     .join("\n");
 
@@ -121,14 +128,14 @@ ${genreInstruction}
 1. タイトルは親しみやすい【日本語】にしてください（例: 「朝の公園ルーティン」）。
 2. ストーリーは短編（3〜5文程度、30語程度）で、高校2年生が理解しやすい自然な英文にしてください。
 3. 文脈に合わせて単語の活用形（過去形、進行形、複数形など）を自由に変えて構いません。指定された意味に沿った文脈で使用してください。
-4. 各単語について、英文本文中で実際にどのような形で使用されたか（活用形など）を "surfaces" 配列にすべて記録してください。元の meaningId と単語スペルを保持してください。
+4. 各単語について、英文本文中で実際にどのような形で使用されたか（活用形など）を "surfaces" 配列に記録してください。
 5. 全文の自然な日本語訳（japaneseStory）も作成してください。
 
 【単語リスト】
 ${wordListText}
   `.trim();
 
-  const result = await generateJson<GenerateStoryResponse>({
+  const result = await generateJson<AiStoryResponse>({
     systemPrompt: STORY_SYSTEM_PROMPT,
     userPrompt: prompt,
     temperature: 0.5, // ストーリーの創造性を出すため0.5に設定
@@ -139,7 +146,27 @@ ${wordListText}
   // Groqが生成したテキストをユーザーに返す前にモデレーションチェックする
   await assertTextsAreSafe([result.title, result.story, result.japaneseStory]);
 
-  return result;
+  // IDはAIに頼らず、システム側（元の入力データ）で完全に保持・紐付ける
+  const finalWords: GeneratedStoryWord[] = words.map((inputWord) => {
+    const matched = result.words?.find(
+      (w) => w.word.toLowerCase() === inputWord.word.toLowerCase(),
+    );
+    return {
+      meaningId: inputWord.meaningId, // システムが保持している正しいID
+      word: inputWord.word,
+      surfaces:
+        matched && Array.isArray(matched.surfaces) && matched.surfaces.length > 0
+          ? matched.surfaces
+          : [inputWord.word],
+    };
+  });
+
+  return {
+    title: result.title,
+    story: result.story,
+    japaneseStory: result.japaneseStory,
+    words: finalWords,
+  };
 }
 
 /**
