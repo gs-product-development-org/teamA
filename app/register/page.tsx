@@ -15,11 +15,11 @@ const MAX_WORDS = 5;
 const NOT_FOUND_TEXT = "辞書に登録されていません";
 
 const GENRE_OPTIONS = [
-  "日常",
-  "ファンタジー",
-  "SF",
-  "ミステリー",
-  "冒険",
+  "Daily Life",
+  "Fantasy",
+  "Sci-Fi",
+  "Mystery",
+  "Adventure",
 ] as const;
 
 export default function WordRegisterPage() {

@@ -253,19 +253,6 @@ export default function StoryGeneratorPage() {
     <div className="container">
 
       <div className={styles.navigation}>
-        {/* <Link
-          href="/register"
-          className={`${styles.returnButtonLink} ${
-            isLoading ? styles.disabledReturnButton : ""
-          }`}
-          aria-disabled={isLoading}
-        >
-          <img
-            src="/return.png"
-            alt="Back button"
-            className={styles.returnImage}
-          />
-        </Link> */}
      <Link
         href="/register"
         className={`${styles.returnButtonLink} ${
