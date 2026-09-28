@@ -299,17 +299,25 @@ export default function StoryGeneratorPage() {
         </button>
       </div>
 
-      {isLoading && (
-        <div className={styles.loading}>
-          <div className={styles.spinner}></div>
+     {isLoading && (
+        <div className={styles.loadingOverlay}>
+          <div className={styles.loading}>
+            <div className={styles.loadingImages}>
+               <img
+                src="/youcyu01_color.png"
+                alt=""
+                className={styles.loadingImageRotate}
+              />
+            </div>
 
-          <p className={styles.loadingTitle}>
-            Generating story...
-          </p>
+            <p className={styles.loadingTitle}>
+              Generating story...
+            </p>
 
-          <p className={styles.loadingText}>
-            AI is writing a story using the words you just registered.
-          </p>
+            <p className={styles.loadingText}>
+              AI is writing a story using the words you just registered.
+            </p>
+          </div>
         </div>
       )}
 

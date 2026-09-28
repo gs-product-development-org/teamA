@@ -76,12 +76,27 @@
 /* ローディング */
 
 .loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: calc(100% - 32px);
+  max-width: 360px;
+  box-sizing: border-box;
+
   padding: 30px 20px;
+
   border: 3px solid var(--color-primary-blue);
   border-radius: 16px;
+
   background-color: #ffffff;
+
   text-align: center;
+
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+
+  z-index: 1000;
 }
 
 .spinner {
@@ -103,14 +118,40 @@
 .loadingTitle {
   margin: 0;
   color: var(--color-primary-blue);
-  font-size: 0.875rem;
+  font-size: 1.3rem;
   font-weight: 700;
 }
 
 .loadingText {
   margin: 4px 0 0;
   color: #78716c;
-  font-size: 0.75rem;
+  font-size: 1rem;
+}
+.loadingImages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+
+.loadingImageRotate {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  animation: rotate 1.5s linear infinite;
+}
+
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* エラー */
