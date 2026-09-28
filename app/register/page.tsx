@@ -103,7 +103,7 @@ export default function WordRegisterPage() {
 
     if (words.length >= MAX_WORDS) {
       setErrorMessage(
-        `単語は最大${MAX_WORDS}個までしか追加できません。`
+        `You can only add up to ${MAX_WORDS} words.`
       );
       return;
     }
@@ -140,7 +140,7 @@ export default function WordRegisterPage() {
   const validateEnglishInputs = (): boolean => {
     if (words.length > MAX_WORDS) {
       setErrorMessage(
-        `単語は最大${MAX_WORDS}個までしか登録できません。`
+        `You can register up to ${MAX_WORDS} words.`
       );
       return false;
     }
@@ -151,7 +151,7 @@ export default function WordRegisterPage() {
 
     if (hasEmpty) {
       setErrorMessage(
-        "すべての行に英単語を入力してください。"
+        "Please enter an English word in every row."
       );
       return false;
     }
@@ -163,7 +163,7 @@ export default function WordRegisterPage() {
 
     if (isOverLength) {
       setErrorMessage(
-        `英単語は${MAX_WORD_LENGTH}文字以内で入力してください。`
+        `Please enter an English word with ${MAX_WORD_LENGTH} characters or fewer.`
       );
       return false;
     }
@@ -177,7 +177,7 @@ export default function WordRegisterPage() {
 
     if (hasInvalidChar) {
       setErrorMessage(
-        "英語欄には半角英字のみを入力してください（日本語は含められません）。"
+        "Please enter only half-width alphabetic characters in the English field."
       );
       return false;
     }
@@ -213,8 +213,8 @@ export default function WordRegisterPage() {
       if (!response.ok) {
         throw new Error(
           response.status === 429
-            ? "AIの利用制限に達しました。しばらく時間を置いてから再度お試しください"
-            : data.error || "翻訳候補の取得に失敗しました"
+            ? "You have reached the AI usage limit. Please wait a while and try again."
+            : data.error || "Failed to retrieve translation suggestions."
         );
       }
 
@@ -261,7 +261,7 @@ export default function WordRegisterPage() {
 
       if (hasNotFound) {
         setErrorMessage(
-          "単語が見つかりませんでした。一般的でないか、スペルミスの可能性があります。"
+          "No word was found. It may be uncommon or misspelled."
         );
       }
     } catch (error: unknown) {
@@ -272,7 +272,7 @@ export default function WordRegisterPage() {
 
       setErrorMessage(
         message ||
-          "翻訳の取得に失敗しました。もう一度「翻訳を取得」を押して再試行してください。"
+          'Failed to retrieve the translation. Please click "Get Translation" again to retry.'
       );
     } finally {
       setIsLoading(false);
@@ -282,7 +282,7 @@ export default function WordRegisterPage() {
   const handleRegisterSubmit = async (): Promise<void> => {
     if (!genre) {
       setErrorMessage(
-        "物語のジャンルを選択してください。"
+        "Please select a story genre."
       );
       return;
     }
@@ -293,7 +293,7 @@ export default function WordRegisterPage() {
 
     if (isMissingJapanese) {
       setErrorMessage(
-        "すべての単語の日本語訳を選択してください。"
+        "Please select a Japanese translation for every word."
       );
       return;
     }
@@ -305,7 +305,7 @@ export default function WordRegisterPage() {
 
     if (validWords.length === 0) {
       setErrorMessage(
-        "登録できる単語がありません（すべての単語が辞書未登録です）。"
+        'No words can be registered (none of the words are in the dictionary).'
       );
       return;
     }
@@ -338,7 +338,7 @@ export default function WordRegisterPage() {
 
       if (!response.ok) {
         throw new Error(
-          data.error || "単語の登録に失敗しました"
+          data.error || "Failed to register the words."
         );
       }
 
@@ -348,7 +348,7 @@ export default function WordRegisterPage() {
 
       if (savedWords.length === 0) {
         throw new Error(
-          "登録された単語データを取得できませんでした"
+          "Failed to retrieve the registered word data."
         );
       }
 
@@ -382,7 +382,7 @@ export default function WordRegisterPage() {
 
       setErrorMessage(
         message ||
-          "登録処理中にエラーが発生しました。もう一度お試しください。"
+          "An error occurred while processing your registration. Please try again."
       );
     } finally {
       setIsLoading(false);
