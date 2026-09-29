@@ -149,7 +149,7 @@ export default function Tabs() {
                     <Link href={`/list/${story.id}`}>
                       <div className={styles.storyTitle}>
                         <h3 className={styles.title}>{story.title}</h3>  
-                        <span className={styles.titleLink}>▶</span>
+                        <img className={styles.titleLink} src="/yajirushiPink.png" alt="➡" />
                       </div>
                       <div className={styles.storyDetail}>
                         {story.imageUrl && (
