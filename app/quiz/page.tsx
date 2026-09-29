@@ -215,6 +215,14 @@ export default function QuizPage() {
   useEffect(() => {
     pickRandomImage();
   }, []);
+  useEffect(() => {
+  if (quizData && !isFinished) {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+}, [currentStoryIndex]);
 
   const currentStory = quizData?.stories[currentStoryIndex];
   const currentParts = currentStory ? buildStoryParts(currentStory) : [];
@@ -303,11 +311,6 @@ export default function QuizPage() {
 
   function handleNextStory(): void {
     if (!quizData || !isAnswered) return;
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
 
     if (currentStoryIndex >= quizData.stories.length - 1) {
       setIsFinished(true);
